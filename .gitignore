@@ -1,5 +1,7 @@
 # yummy secret py
 secret.py
+settings.py
+config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,55 +1,38 @@
-from sqlalchemy import Table, Column, Integer, ForeignKey, String
+from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
-from sqlalchemy.engine.url import URL
-import settings
+
 
 
 Base = declarative_base()
 
-def db_connect():
-    """
-    Performs database connection using database settings from settings.py.
-    Returns sqlalchemy engine instance
-    """
-    return create_engine(URL(**settings.DATABASE))
-
-def create_tables(engine):
-    """"""
-    Base.metadata.create_all(engine)
 
 
-Game_Player_Hand = Table('game_player_hand', Base.metadata,
+Game_Player = Table('game_player', Base.metadata,
                          Column('game_id', Integer, ForeignKey('game.id')),
-                         Column('player_id', Integer, ForeignKey('player.id')),
-                         Column('hand_id', Integer, ForeignKey('hand.id')))
-
-
+                         Column('player_id', Integer, ForeignKey('player.id')),)
 
 
 class Player(Base):
     __tablename__ = 'player'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    username = Column(String(80), unique=True)
-    pw_hash = Column(String(80))
-    bank = Column(Integer)
-    hands = relationship('Hand', secondary='game_player_hand')
-    games = relationship('Game', secondary='game_player_hand')
-
+    name = Column(String(100))
+    hands = relationship('Hand', backref='player')
+    turns = relationship('Turn', backref='player')
+    cards = relationship('Card', uselist=False, backref='player')
+    bank = Column(Integer, default=100)
 
 
 class Game(Base):
     __tablename__ = 'game'
     id = Column(Integer, primary_key=True)
+    players = relationship('Player', secondary='game_player', backref='games')
+    hands = relationship('Hand', backref='game')
+    turns = relationship('Turn', backref='game')
+    turn_state = Column(Integer)
     type = Column(String(80))
-    players = relationship("Player", secondary='game_player_hand', backref=backref('game', uselist=False))
-    # OR players = dictionary
-    hands = relationship("Hand", secondary='game_player_hand')
-    deck = Column(Integer, ForeignKey('hand.id'))
-    turn = Integer
-    # OR turn = Column(Integer, ForeignKey('player.id'))
+    pot = Column(Integer)
+    is_over = Column(Boolean(create_constraint=False))
 
     def __init__(self, type):
         self.type = type
@@ -58,18 +41,40 @@ class Game(Base):
 class Hand(Base):
     __tablename__ = 'hand'
     id = Column(Integer, primary_key=True)
-    pieces = relationship('Piece', back_populates='hand')
-    # game = relationship('game', ForeignKey('game'))
-    bet = Column(Integer, default=0)
-    score = Column(Integer, default=0)
-
-
-class Piece(Base):
-    __tablename__ = 'piece'
-    id = Column(Integer, primary_key=True)
-    category = Column(String(80))
-    hand_id = Column(Integer, ForeignKey('hand.id'))
-    hand = relationship("Hand", back_populates="pieces")
-    sequence = Column(Integer, default=1)
-    value = Column(String(100))
+    game_id = Column(Integer, ForeignKey('game.id'))
     player_id = Column(Integer, ForeignKey('player.id'))
+    cards = relationship('Card', backref='hand')
+    bet = Column(Integer)
+
+
+class Card(Base):
+    __tablename__ = 'Card'
+    id = Column(Integer, primary_key=True)
+    player_id = Column(Integer, ForeignKey('player.id'))
+    hand_id = Column(Integer, ForeignKey('hand.id'))
+    value = Column(String(80))
+    sequence = Column(Integer)
+    category = Column(String(80))
+
+
+class Turn(Base):
+    __tablename__ = 'turn'
+    id = Column(Integer, primary_key=True)
+    player_id = Column(Integer, ForeignKey('player.id'))
+    game_id = Column(Integer, ForeignKey('game.id'))
+    is_turn = Column(Boolean(create_constraint=False))
+    turn_number = Column(Integer)
+
+
+# class GameRelations(Base):
+#     id = Column(Integer, primary_key=True)
+#     __tablename__ = 'game_relations'
+#     game_id = Column(Integer, ForeignKey('game.id'), primary_key=True)
+#     player_id = Column(Integer, ForeignKey('player.id'), primary_key=True)
+#     hand_id = Column(Integer, ForeignKey('hand.id'), primary_key=True)
+#     Card_id = Column(Integer, ForeignKey('Card.id'), primary_key=True)
+#     player = relationship('Player', backref='game_relations')
+#     hand = relationship('Hand', backref='game_relations')
+#     Card = relationship('Card', backref='game_relations')
+
+

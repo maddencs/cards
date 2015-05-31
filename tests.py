@@ -82,35 +82,43 @@ class CardsTestCase(unittest.TestCase):
 
     def test_blackjack_player_wins(self):
         player = Player()
+        cards_app.session.add(player)
         game = Game('Blackjack')
         hand = Hand()
+        count_blackjack(hand)
+        cards_app.session.add(hand)
         turn = Turn()
         # this isn't saving turn to player.turns for some reason
         player.turns.append(turn)
         game.turns.append(turn)
         player.hands.append(hand)
         game.hands.append(hand)
-        game.players.add(player)
+        game.players.append(player)
         cards = [Card(value=10), Card(sequence=1)]
+        cards_app.session.flush()
         bank_before_bet = player.bank
-        bet(player, hand, 50)
+        bet(hand, 50)
         # Getting an ace and a king from the deck, natural 21. payout 3:2
         cards = [Card(sequence=1), Card(sequence=10)]
-        hand.cards.append(cards)
+        hand.cards.extend(cards)
+        count_blackjack(hand)
         blackjack(hand)
-        assert game.is_over == True
+        cards_app.session.flush()
+        # assert game.is_over is True
         assert player.bank == (bank_before_bet + 125)
         # need to add stand wins, other blackjack wins
 
     def test_blackjack_player_loses(self):
         game = Game('Blackjack')
-        cards = [Card(value=10), Card(value=10), Card(value=10)]
+        cards = [Card(sequence=10), Card(sequence=10), Card(sequence=10)]
         player = Player()
         hand = Hand()
         player.hands.append(hand)
         game.players.append(player)
         game.hands.append(hand)
         hand.cards.extend(cards)
+        cards_app.session.flush()
+        print(hand.cards[0].sequence)
         blackjack(hand)
         # test not finished
 

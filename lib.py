@@ -9,7 +9,7 @@ def piece_maker(category, values, decks):
     while i < decks:
         for c in category:
             for v in values:
-                p = Card(category=c, sequence=(values.index(v)+1), value=v)
+                p = Card(category=c, sequence=(values.index(v) + 1), value=v)
                 result.append(p)
         i += 1
     return result
@@ -29,12 +29,13 @@ def shuffle(deck):
                 result.append(cards[random_int])
                 cards = [x for x in cards if x not in result]
                 cards_left = len(cards)
-                cards_left_index = (cards_left-1)
+                cards_left_index = (cards_left - 1)
 
                 if cards_left:
                     random_int = randint(0, cards_left_index)
         i += 1
     return result
+
 
 def hit(hand, source, count):
     cards = source.cards
@@ -47,13 +48,14 @@ def hit(hand, source, count):
         i += 1
     session.commit()
 
-def bet(player, hand, points):
-    pass
+
+def bet(hand, points):
+    hand.bet += points
 
 
 def split(hand):
-    player = session.query(Player).filter(Player.id==hand.player_id).all()[0]
-    game = session.query(Game).filter(Game.id==hand.game_id).all()[0]
+    player = session.query(Player).filter(Player.id == hand.player_id).all()[0]
+    game = session.query(Game).filter(Game.id == hand.game_id).all()[0]
     card = hand.cards.pop()
     new_hand = Hand()
     player.hands.append(new_hand)

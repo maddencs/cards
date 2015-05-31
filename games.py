@@ -1,6 +1,6 @@
 from models import Hand, Turn, Game, Card, Player
 from cards_app import session
-
+from sqlalchemy.inspection import inspect
 
 def count_blackjack(hand):
     hand.score = 0
@@ -18,20 +18,20 @@ def count_blackjack(hand):
         else:
             hand.score += 11
 
+
 def blackjack(hand):
     game = hand.game
     player = hand.player
-    print(player.turns)
-    turn = session.query(Turn).filter(Turn.player_id==player.id).filter(Turn.game_id==game.id).all()[0]
+    turn = session.query(Turn).filter(Turn.game == game).filter(Turn.player == player).all()
     if hand.score > 21:
         # go to next hand
         pass
     elif hand.score == 21:
         if len(hand.cards) == 2:
-            player.bank += hand.bet*2.5
+            player.bank += hand.bet * 2.5
             hand.bet = 0
         else:
-            player.bank += hand.bet*2
+            player.bank += hand.bet * 2
     elif len(hand.cards) == 5:
         # look into this blackjack rule
         pass

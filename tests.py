@@ -5,7 +5,7 @@ import tempfile
 import collections
 from timeit import Timer
 from models import Player, Game, Card, Hand, Turn
-from lib import piece_maker, shuffle, hit, bet, shuffle2
+from lib import piece_maker, shuffle, hit, bet
 from games import count_blackjack, blackjack
 from sqlalchemy import and_
 

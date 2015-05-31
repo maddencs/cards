@@ -1,4 +1,4 @@
-from models import Player, Game, Card
+from models import Player, Game, Card, Hand
 from random import randint
 from cards_app import session
 
@@ -36,20 +36,6 @@ def shuffle(deck):
         i += 1
     return result
 
-
-
-def shuffle2(deck):
-    i = 0
-    while i < 7:
-        for card in deck:
-            index = randint(0, len(deck))
-            old_index = deck.index(card)
-            old = deck[index]
-            deck[index] = card
-            deck[old_index] = old
-        i += 1
-    return deck
-
 def hit(hand, source, count):
     cards = source.cards
     player = hand.player
@@ -63,3 +49,12 @@ def hit(hand, source, count):
 
 def bet(player, hand, points):
     pass
+
+
+def split(hand):
+    player = session.query(Player).filter(Player.id==hand.player_id).all()[0]
+    game = session.query(Game).filter(Game.id==hand.game_id).all()[0]
+    card = hand.cards.pop()
+    new_hand = Hand()
+    player.hands.append(new_hand)
+    game.hands.append(new_hand)

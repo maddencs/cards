@@ -29,7 +29,7 @@ class Game(Base):
     players = relationship('Player', secondary='game_player', backref='games')
     hands = relationship('Hand', backref='game')
     turns = relationship('Turn', backref='game')
-    turn_state = Column(Integer)
+    turn_number = Column(Integer)
     type = Column(String(80))
     pot = Column(Integer)
     is_over = Column(Boolean(create_constraint=False))
@@ -45,6 +45,7 @@ class Hand(Base):
     player_id = Column(Integer, ForeignKey('player.id'))
     cards = relationship('Card', backref='hand')
     bet = Column(Integer)
+    score = Column(Integer)
 
 
 class Card(Base):

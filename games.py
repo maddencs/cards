@@ -31,7 +31,8 @@ def blackjack(hand):
             player.bank += hand.bet * 2.5
             hand.bet = 0
         else:
-            player.bank += hand.bet * 2
+            # evaluate
+            pass
     elif len(hand.cards) == 5:
         # look into this blackjack rule
         pass

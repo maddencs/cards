@@ -5,7 +5,7 @@ import tempfile
 import collections
 from timeit import Timer
 from models import Player, Game, Card, Hand, Turn
-from lib import piece_maker, shuffle, hit, bet
+from lib import piece_maker, shuffle, hit, bet, split
 from games import count_blackjack, blackjack
 from sqlalchemy import and_
 
@@ -33,30 +33,19 @@ class CardsTestCase(unittest.TestCase):
         g.hands.append(h)
         p.hands.append(h2)
         cards = piece_maker(suits, card_values, 1)
-        for card in cards:
-            cards_app.session.add(card)
         h.cards.extend(cards)
-        cards_app.session.add(p)
-        cards_app.session.add(g)
-        cards_app.session.add(h)
-        cards_app.session.add(h2)
         cards_app.session.commit()
         # end of setup
         # deck is made in setUp() with piece_maker() ha
         deck = cards_app.session.query(Hand).filter(Hand.id == h.id).all()[0]
-        game = deck.game
-        cards = deck.cards
-        player = cards_app.session.query(Player).filter(Player.id == p.id)[0]
-        cards2 = cards_app.session.query(Card).filter(Card.hand == deck).all()
+        player = p
         hand2 = cards_app.session.query(Hand).filter(Hand.player_id == player.id).all()[0]
-        cards = shuffle(deck)
         assert deck.cards != shuffle(deck)
         assert player.name == 'Cory'
         game = cards_app.session.query(Game).filter(Game.players.any(id=player.id)).all()
-        hand = cards_app.session.query(Player.hands).filter(Hand.player_id == player.id).filter(
-            Hand.game_id == game[0].id).all()
         hit(hand2, deck, 1)
         cards_app.session.commit()
+        # do we still have 52 cards after hitting?
         assert len(set(deck.cards)) + len(set(hand2.cards)) == 52
         cards = cards_app.session.query(Card).filter(Card.player_id == p.id)
         for card in cards:
@@ -66,7 +55,6 @@ class CardsTestCase(unittest.TestCase):
         cards_app.session.delete(h)
         cards_app.session.delete(hand2)
         cards_app.session.commit()
-        # t = Timer(lambda: shuffle(deck))
 
     def test_count_blackjack_hand(self):
         hand = Hand()
@@ -80,47 +68,74 @@ class CardsTestCase(unittest.TestCase):
         count_blackjack(hand)
         assert hand.score == 23
 
+    def test_split(self):
+        cards = [Card(sequence=1), Card(sequence=1)]
+        hand = Hand()
+        player = Player()
+        game = Game('Blackjack')
+        player.hands.append(hand)
+        player.cards.extend(cards)
+        game.hands.append(hand)
+        hand.cards.extend(cards)
+        split(hand)
+        hands = player.hands
+        cards = player.cards
+        assert len(hands) == 2
+        assert len(cards) == 2
+        assert hands[0].cards[0].sequence == hands[1].cards[0].sequence
+
     def test_blackjack_player_wins(self):
         player = Player()
         cards_app.session.add(player)
         game = Game('Blackjack')
         hand = Hand()
-        count_blackjack(hand)
-        cards_app.session.add(hand)
         turn = Turn()
-        # this isn't saving turn to player.turns for some reason
         player.turns.append(turn)
         game.turns.append(turn)
         player.hands.append(hand)
         game.hands.append(hand)
         game.players.append(player)
-        cards = [Card(value=10), Card(sequence=1)]
+
         cards_app.session.flush()
         bank_before_bet = player.bank
         bet(hand, 50)
-        # Getting an ace and a king from the deck, natural 21. payout 3:2
         cards = [Card(sequence=1), Card(sequence=10)]
         hand.cards.extend(cards)
         count_blackjack(hand)
         blackjack(hand)
         cards_app.session.flush()
-        # assert game.is_over is True
-        assert player.bank == (bank_before_bet + 125)
-        # need to add stand wins, other blackjack wins
+        # player wins with nautral blackjack
+        assert player.bank == (bank_before_bet + 75)
+        # player stands on 18, dealer stands on 17
+        hand.cards = [Card(sequence=10), Card(sequence=8)]
+        bet(hand, 50)
+        game.dealer = Player()
+        dealer = game.dealer
+        dealer.cards = [Card(sequence=10), Card(sequence=17)]
+        dealer_hand = Hand()
+        dealer_hand.cards = dealer.cards
+        # game.deal
+        # figure out mixin with backref
 
     def test_blackjack_player_loses(self):
         game = Game('Blackjack')
         cards = [Card(sequence=10), Card(sequence=10), Card(sequence=10)]
         player = Player()
+        cards_app.session.add(player)
         hand = Hand()
         player.hands.append(hand)
         game.players.append(player)
         game.hands.append(hand)
-        hand.cards.extend(cards)
         cards_app.session.flush()
-        print(hand.cards[0].sequence)
+        hand.cards.extend(cards)
+        bank_after_bet = player.bank
+        count_blackjack(hand)
         blackjack(hand)
-        # test not finished
+        # player loses if he breaks
+        assert player.bank == bank_after_bet
+
+        hand.cards = [Card(sequence=10), Card(sequence=5)]
+        bet(hand, 50)
 
 
 

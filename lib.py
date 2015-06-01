@@ -11,11 +11,11 @@ def piece_maker(category, values, decks):
             for v in values:
                 p = Card(category=c, sequence=(values.index(v) + 1), value=v)
                 result.append(p)
+                session.add(p)
         i += 1
     return result
 
 
-# make this more efficient?
 def shuffle(deck):
     cards = deck.cards
     i = 0
@@ -50,13 +50,18 @@ def hit(hand, source, count):
 
 
 def bet(hand, points):
+    hand.player.bank -= points
     hand.bet += points
+    session.commit()
 
 
 def split(hand):
-    player = session.query(Player).filter(Player.id == hand.player_id).all()[0]
-    game = session.query(Game).filter(Game.id == hand.game_id).all()[0]
+    player = hand.player
+    game = hand.game
     card = hand.cards.pop()
     new_hand = Hand()
+    session.flush()
     player.hands.append(new_hand)
     game.hands.append(new_hand)
+    card.hand = new_hand
+    session.commit()

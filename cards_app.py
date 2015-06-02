@@ -12,10 +12,6 @@ create_tables(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
 
 if __name__ == '__main__':
     app.run()

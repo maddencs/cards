@@ -15,7 +15,6 @@ def piece_maker(category, values, decks):
         i += 1
     return result
 
-
 def shuffle(deck):
     cards = deck.cards
     i = 0
@@ -36,32 +35,29 @@ def shuffle(deck):
         i += 1
     return result
 
-
-def hit(hand, source, count):
-    cards = source.cards
+def hit(hand, count):
+    cards = hand.game.deck.cards
     player = hand.player
     i = 0
     while i < count:
         card = cards.pop()
-        card.player_id = player.id
+        player.cards.append(card)
         hand.cards.append(card)
         i += 1
     session.commit()
-
 
 def bet(hand, points):
     hand.player.bank -= points
     hand.bet += points
     session.commit()
 
-
 def split(hand):
     player = hand.player
     game = hand.game
-    card = hand.cards.pop()
     new_hand = Hand()
-    session.flush()
-    player.hands.append(new_hand)
+    new_hand.cards = [hand.cards.pop()]
     game.hands.append(new_hand)
-    card.hand = new_hand
-    session.commit()
+    player.hands.append(new_hand)
+    new_hand.cards.append(game.deck.cards.pop())
+    hand.cards.append(game.deck.cards.pop())
+    session.flush()

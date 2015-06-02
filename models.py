@@ -2,7 +2,6 @@ from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-from sqlalchemy.ext.declarative import declared_attr
 
 
 Base = declarative_base()
@@ -10,6 +9,11 @@ Base = declarative_base()
 Game_Player = Table('game_player', Base.metadata,
                     Column('game_id', Integer, ForeignKey('game.id')),
                     Column('player_id', Integer, ForeignKey('player.id')), )
+
+
+class GameRoom(Base):
+    __tablename__ = 'gameroom'
+    id = Column('id', Integer, primary_key=True)
 
 
 class Player(Base):
@@ -53,7 +57,6 @@ class Game(Base):
         for use in showing current game's stats since most of the info
         that will be displayed will be deleted at the end of the game
         """
-        pass
 
 
 class Hand(Base):
@@ -74,6 +77,7 @@ class Card(Base):
     value = Column(String(80))
     sequence = Column(Integer)
     category = Column(String(80))
+    temp_value = Column(Integer)
 
 
 class Turn(Base):
@@ -83,3 +87,4 @@ class Turn(Base):
     game_id = Column(Integer, ForeignKey('game.id'))
     is_turn = Column(Boolean(create_constraint=False))
     turn_number = Column(Integer)
+    is_expired = Column(Boolean(create_constraint=False))

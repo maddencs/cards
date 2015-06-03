@@ -1,3 +1,4 @@
+__author__ = 'cory'
 import os
 import cards_app
 import unittest
@@ -14,17 +15,17 @@ hand = Hand()
 
 class CardsTestCase(unittest.TestCase):
     def setUp(self):
-        cards_app.app.self_fd, cards_app.app.config['DATABASE'] = tempfile.mkstemp()
+        self.db_fd, cards_app.app.config['DATABASE'] = tempfile.mkstemp()
         cards_app.app.config['TESTING'] = True
         self.app = cards_app.app.test_client()
 
     def tearDown(self):
-        os.close(cards_app.app.self_fd)
+        os.close(self.db_fd)
         os.unlink(cards_app.app.config['DATABASE'])
 
     def test_make_deck_shuffle_hit(self):
         # setup
-        turn = Turn()
+        # turn = Turn()
         player.first_name = 'Cory'
         player.last_name = 'Madden'
         assert player.fullname == 'Cory Madden'
@@ -85,9 +86,9 @@ class CardsTestCase(unittest.TestCase):
         assert hands[0].cards[0].sequence == hands[1].cards[0].sequence
 
     def test_blackjack_player_wins(self):
-        turn = Turn()
-        player.turns.append(turn)
-        game.turns.append(turn)
+        # turn = Turn()
+        # player.turns.append(turn)
+        # game.turns.append(turn)
         player.hands.append(hand)
         game.hands.append(hand)
         game.players.append(player)
@@ -143,7 +144,7 @@ class CardsTestCase(unittest.TestCase):
         game.deck = Hand()
         game.dealer = Player()
         game.dealer.hands.append(Hand())
-        game.dealer.turns.append(Turn())
+        # game.dealer.turns.append(Turn())
         game.hands.append(game.dealer.hands[0])
         player.hands.append(hand)
         game.hands.append(hand)
@@ -156,7 +157,8 @@ class CardsTestCase(unittest.TestCase):
         bet(hand, 50)
         count_blackjack(hand)
         blackjack_dealer(game)
-        blackjack_payout(game)
+        # blackjack_payout(game)
+        print(player.bank)
         assert player.bank == 100
         # Player gets 15 and dealer gets 15, dealer hits and breaks because deck is unshuffled and king on top
         hand.cards = [Card(sequence=10), Card(sequence=5)]
@@ -164,7 +166,7 @@ class CardsTestCase(unittest.TestCase):
         bet(hand, 50)
         count_blackjack(hand)
         blackjack_dealer(game)
-        blackjack_payout(game)
+        # blackjack_payout(game)
         assert player.bank == 150
         # player gets blackjack, dealer doesn't
         hand.bet = 0
@@ -174,7 +176,7 @@ class CardsTestCase(unittest.TestCase):
         bet(hand, 50)
         count_blackjack(hand)
         blackjack_dealer(game)
-        blackjack_payout(game)
+        # blackjack_payout(game)
         assert player.bank == 175
         # player broke, loses bet
         hand.bet = 0

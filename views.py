@@ -1,3 +1,4 @@
+__author__ = 'cory'
 from models import Player, Game, Hand, Turn, Card, GameRoom
 from cards_app import session, app
 from flask import request, redirect, render_template, url_for, flash

@@ -1,3 +1,4 @@
+__author__ = 'cory'
 from models import Player, Game, Card, Hand
 from random import randint
 from cards_app import session

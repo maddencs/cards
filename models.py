@@ -1,3 +1,4 @@
+__author__ = 'cory'
 from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
@@ -14,6 +15,8 @@ Game_Player = Table('game_player', Base.metadata,
 class GameRoom(Base):
     __tablename__ = 'gameroom'
     id = Column('id', Integer, primary_key=True)
+    game = relationship('Game', uselist=False, backref='room')
+    game_id = Column(Integer, ForeignKey('game.id'))
 
 
 class Player(Base):
@@ -23,7 +26,7 @@ class Player(Base):
     first_name = Column('first_name', String(100))
     last_name = Column('last_name', String(100))
     hands = relationship('Hand', backref='player')
-    turns = relationship('Turn', backref='player')
+    # turns = relationship('Turn', backref='player')
     cards = relationship('Card', backref='player')
     bank = Column('bank', Integer, default=100)
 
@@ -35,11 +38,10 @@ class Player(Base):
 class Game(Base):
     __tablename__ = 'game'
     id = Column('id', Integer, primary_key=True)
-    room = relationship('GameRoom', uselist=False, backref='game')
     players = relationship('Player', secondary='game_player', backref='games')
     hands = relationship('Hand', backref='game')
-    turns = relationship('Turn', backref='game')
-    turn_number = Column(Integer)
+    # turns = relationship('Turn', backref='game')
+    # turn_number = Column(Integer)
     dealer_id = Column(Integer, ForeignKey('player.id'))
     dealer = relationship("Player", backref=backref("game", uselist=False))
     deck = relationship("Hand", uselist=False, backref="owner")
@@ -69,6 +71,8 @@ class Hand(Base):
     cards = relationship('Card', backref='hand')
     bet = Column('bet', Integer, default=0)
     score = Column('score', Integer)
+    turn = relationship('Turn', uselist=False, backref='hand')
+    turn_id = Column(Integer, ForeignKey('turn.id'))
 
 
 class Card(Base):

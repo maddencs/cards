@@ -19,6 +19,7 @@ class GameRoom(Base):
 class Player(Base):
     __tablename__ = 'player'
     id = Column('id', Integer, primary_key=True)
+    username = Column('username', String(20), unique=True)
     first_name = Column('first_name', String(100))
     last_name = Column('last_name', String(100))
     hands = relationship('Hand', backref='player')
@@ -34,6 +35,7 @@ class Player(Base):
 class Game(Base):
     __tablename__ = 'game'
     id = Column('id', Integer, primary_key=True)
+    room = relationship('GameRoom', uselist=False, backref='game')
     players = relationship('Player', secondary='game_player', backref='games')
     hands = relationship('Hand', backref='game')
     turns = relationship('Turn', backref='game')

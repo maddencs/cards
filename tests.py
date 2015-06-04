@@ -139,14 +139,15 @@ class CardsTestCase(unittest.TestCase):
         # next loss condition, push
 
     def test_blackjack_payout(self):
-        # game = Game('Blackjack')
+        game.players = []
         player.bank = 100
         game.deck = Hand()
         game.dealer = Player()
         game.dealer.hands.append(Hand())
-        # game.dealer.turns.append(Turn())
+        game.dealer.hands[0].turn = Turn()
         game.hands.append(game.dealer.hands[0])
         player.hands.append(hand)
+        hand.turn = Turn()
         game.hands.append(hand)
         game.deck.cards = piece_maker(suits, card_values, 1)
         game.players.append(player)
@@ -157,18 +158,18 @@ class CardsTestCase(unittest.TestCase):
         bet(hand, 50)
         count_blackjack(hand)
         blackjack_dealer(game)
-        # blackjack_payout(game)
-        print(player.bank)
         assert player.bank == 100
         # Player gets 15 and dealer gets 15, dealer hits and breaks because deck is unshuffled and king on top
+        player.bank = 100
         hand.cards = [Card(sequence=10), Card(sequence=5)]
         game.dealer.hands[0].cards = [Card(sequence=10), Card(sequence=5)]
         bet(hand, 50)
+        hand.turn.is_expired = False
         count_blackjack(hand)
         blackjack_dealer(game)
-        # blackjack_payout(game)
         assert player.bank == 150
         # player gets blackjack, dealer doesn't
+        hand.turn.is_expired = False
         hand.bet = 0
         player.bank = 100
         hand.cards = [Card(sequence=10), Card(sequence=1)]
@@ -176,9 +177,9 @@ class CardsTestCase(unittest.TestCase):
         bet(hand, 50)
         count_blackjack(hand)
         blackjack_dealer(game)
-        # blackjack_payout(game)
         assert player.bank == 175
         # player broke, loses bet
+        hand.turn.is_expired = False
         hand.bet = 0
         player.bank = 100
         hand.cards = [Card(sequence=10), Card(sequence=10), Card(sequence=10)]

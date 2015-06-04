@@ -3,6 +3,11 @@ from models import Hand, Turn, Game, Card, Player
 from cards_app import session
 from lib import hit
 
+"""
+
+                        Blackjack functions
+
+"""
 
 def count_blackjack(hand):
     hand.score = 0
@@ -34,7 +39,7 @@ def evaluate_hit(hand):
     elif hand.score == 21:
         pass
     elif len(hand.cards) == 5:
-        # m
+        # maybe let player win if they have five cards
         pass
 
 
@@ -44,6 +49,7 @@ def blackjack_dealer(game):
     count_blackjack(dealer_hand)
     # evaluating dealer's move
     if dealer_hand.score > 17:
+        dealer_hand.turn.is_turn = False
         blackjack_payout(game)
     elif dealer_hand.score == 17:
         aces = 0
@@ -60,6 +66,8 @@ def blackjack_dealer(game):
     elif dealer_hand.score < 17:
         hit(dealer_hand, 1)
         blackjack_dealer(game)
+    if not dealer_hand.turn.is_turn:
+        blackjack_payout(game)
 
 
 def blackjack_payout(game):
@@ -70,33 +78,34 @@ def blackjack_payout(game):
     """
     for player in game.players:
         hands = session.query(Hand).filter(Hand.game == game).filter(Hand.player == player).all()
-        # turn = session.query(Turn).filter(Turn.player == player).all()
         for hand in hands:
-            if hand.score < 21:
-                if game.dealer.hands[0].score < hand.score:
-                    # Player wins, has high hand
-                    player.bank += hand.bet * 2
-                elif game.dealer.hands[0].score == hand.score:
-                    # Player pushes, has equal score to dealer
-                    player.bank += hand.bet
-                    hand.bet = 0
-                elif game.dealer.hands[0].score > 21:
-                    player.bank += hand.bet
-                elif 21 > game.dealer.hands[0].score > hand.score:
-                    # dealer wins, high hand
-                    hand.bet = 0
-            elif hand.score == 21:
-                if game.dealer.hands[0].score == 21:
-                    if len(game.dealer.hands[0].cards) == 2 and len(hand.cards) == 2:
-                        # Dealer and player get blackjack, push
+            if not hand.turn.is_expired:
+                if hand.score < 21:
+                    if game.dealer.hands[0].score < hand.score:
+                        # Player wins, has high hand
+                        player.bank += hand.bet * 2
+                    elif game.dealer.hands[0].score == hand.score:
+                        # Player pushes, has equal score to dealer
                         player.bank += hand.bet
-                    elif len(game.dealer.hands[0].cards) == 2 and len(hand.cards) > 2:
-                        # player gets 21, but dealer gets blackjack, player loses
                         hand.bet = 0
-                elif len(hand.cards) > 2:
-                    # player has 21, but not blackjack
-                    player.score += hand.bet * 2
-                elif len(hand.cards) == 2:
-                    # player has blackjack
-                    player.bank += hand.bet * 2.5
+                    elif game.dealer.hands[0].score > 21:
+                        player.bank += hand.bet
+                    elif 21 > game.dealer.hands[0].score > hand.score:
+                        # dealer wins, high hand
+                        hand.bet = 0
+                elif hand.score == 21:
+                    if game.dealer.hands[0].score == 21:
+                        if len(game.dealer.hands[0].cards) == 2 and len(hand.cards) == 2:
+                            # Dealer and player get blackjack, push
+                            player.bank += hand.bet
+                        elif len(game.dealer.hands[0].cards) == 2 and len(hand.cards) > 2:
+                            # player gets 21, but dealer gets blackjack, player loses
+                            hand.bet = 0
+                    elif len(hand.cards) > 2:
+                        # player has 21, but not blackjack
+                        player.score += hand.bet * 2
+                    elif len(hand.cards) == 2:
+                        # player has blackjack
+                        player.bank += hand.bet * 2.5
+                hand.turn.is_expired = True
 

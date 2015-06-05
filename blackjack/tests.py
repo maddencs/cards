@@ -1,11 +1,12 @@
 __author__ = 'cory'
 import os
-import cards_app
 import unittest
 import tempfile
+
+from blackjack import blackjack_app
 from models import Player, Game, Card, Hand, Turn
 from lib import piece_maker, shuffle, hit, bet, split
-from games import count_blackjack, evaluate_hit, blackjack_dealer, blackjack_payout
+from blackjack.rules import count_blackjack, evaluate_hit, blackjack_dealer, blackjack_payout
 
 suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
 card_values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
@@ -15,13 +16,13 @@ hand = Hand()
 
 class CardsTestCase(unittest.TestCase):
     def setUp(self):
-        self.db_fd, cards_app.app.config['DATABASE'] = tempfile.mkstemp()
-        cards_app.app.config['TESTING'] = True
-        self.app = cards_app.app.test_client()
+        self.db_fd, blackjack_app.app.config['DATABASE'] = tempfile.mkstemp()
+        blackjack_app.app.config['TESTING'] = True
+        self.app = blackjack_app.app.test_client()
 
     def tearDown(self):
         os.close(self.db_fd)
-        os.unlink(cards_app.app.config['DATABASE'])
+        os.unlink(blackjack_app.app.config['DATABASE'])
 
     def test_make_deck_shuffle_hit(self):
         # setup
@@ -36,19 +37,19 @@ class CardsTestCase(unittest.TestCase):
         player.hands.append(h2)
         cards = piece_maker(suits, card_values, 1)
         h.cards.extend(cards)
-        cards_app.session.commit()
+        blackjack_app.session.commit()
         # end of setup
         # deck is made in setUp() with piece_maker() ha
         game.deck = h
         game.hands.append(h2)
         deck = game.deck
         hand2 = h2
-        cards_app.session.flush()
+        blackjack_app.session.flush()
         assert deck.cards != shuffle(deck)
         hand_before_hit = len(hand2.cards)
         deck_before_hit = len(deck.cards)
         hit(hand2, 1)
-        cards_app.session.commit()
+        blackjack_app.session.commit()
         # do we still have 52 cards after hitting?
         assert len(set(deck.cards)) + len(set(hand2.cards)) == 52
         assert len(deck.cards) == deck_before_hit-1
@@ -92,14 +93,14 @@ class CardsTestCase(unittest.TestCase):
         player.hands.append(hand)
         game.hands.append(hand)
         game.players.append(player)
-        cards_app.session.flush()
+        blackjack_app.session.flush()
         bank_before_bet = player.bank
         bet(hand, 50)
         cards = [Card(sequence=1), Card(sequence=10)]
         hand.cards.extend(cards)
         count_blackjack(hand)
         evaluate_hit(hand)
-        cards_app.session.flush()
+        blackjack_app.session.flush()
         # player wins with nautral evaluate_hit
         assert player.bank == bank_before_bet - 50
         # player stands on 18, dealer stands on 17
@@ -117,12 +118,12 @@ class CardsTestCase(unittest.TestCase):
         game = Game('Blackjack')
         cards = [Card(sequence=10), Card(sequence=10), Card(sequence=10)]
         player = Player()
-        cards_app.session.add(player)
+        blackjack_app.session.add(player)
         hand = Hand()
         player.hands.append(hand)
         game.players.append(player)
         game.hands.append(hand)
-        cards_app.session.flush()
+        blackjack_app.session.flush()
         hand.cards.extend(cards)
         bank_after_bet = player.bank
         count_blackjack(hand)
@@ -151,7 +152,7 @@ class CardsTestCase(unittest.TestCase):
         game.hands.append(hand)
         game.deck.cards = piece_maker(suits, card_values, 1)
         game.players.append(player)
-        cards_app.session.flush()
+        blackjack_app.session.flush()
         # testing player AND dealer get blackjack
         hand.cards = [Card(sequence=1), Card(sequence=10)]
         game.dealer.hands[0].cards = [Card(sequence=1), Card(sequence=10)]
@@ -189,3 +190,26 @@ class CardsTestCase(unittest.TestCase):
         blackjack_dealer(game)
         blackjack_payout(game)
         assert player.bank == 50
+
+    def test_blackjack_dealer(self):
+        game.players = []
+        player.bank = 100
+        game.deck = Hand()
+        game.dealer = Player()
+        game.dealer.hands.append(Hand())
+        game.dealer.hands[0].turn = Turn()
+        game.hands.append(game.dealer.hands[0])
+        player.hands.append(hand)
+        hand.turn = Turn()
+        game.hands.append(hand)
+        game.deck.cards = piece_maker(suits, card_values, 1)
+        game.players.append(player)
+        blackjack_app.session.flush()
+        player.hands[0].cards = [Card(sequence=10), Card(sequence=8)]
+        game.dealer.hands[0].cards = [Card(sequence=6), Card(sequence=1)]
+        bet(player.hands[0], 50)
+        count_blackjack(player.hands[0])
+        blackjack_dealer(game)
+        blackjack_payout(game)
+        # blackjack dealer should break after hitting on he soft 17
+        assert player.bank == 150

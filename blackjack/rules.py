@@ -1,6 +1,6 @@
 __author__ = 'cory'
-from models import Hand, Turn, Game, Card, Player
-from cards_app import session
+from models import Hand
+from blackjack.blackjack_app import session
 from lib import hit
 
 """
@@ -51,18 +51,14 @@ def blackjack_dealer(game):
     if dealer_hand.score > 17:
         dealer_hand.turn.is_turn = False
         blackjack_payout(game)
+    # evaluate if dealer has any aces in his 17 making a soft 17 at which point he should hit
     elif dealer_hand.score == 17:
-        aces = 0
         for card in dealer_hand.cards:
-            if card.sequence == 1:
-                aces += 1
+            if card.temp_value == 11:
+                hit(dealer_hand, 1)
+                blackjack_dealer(game)
             else:
-                pass
-        if aces > 0:
-            hit(dealer_hand, 1)
-            blackjack_dealer(game)
-        else:
-            blackjack_payout(game)
+                blackjack_payout(game)
     elif dealer_hand.score < 17:
         hit(dealer_hand, 1)
         blackjack_dealer(game)

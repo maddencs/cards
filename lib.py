@@ -2,7 +2,7 @@ __author__ = 'cory'
 from random import randint
 
 from models import Card, Hand
-from blackjack.blackjack_app import session
+from cards_app import session
 
 
 def piece_maker(category, values, decks):

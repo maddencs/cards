@@ -1,6 +1,6 @@
 __author__ = 'cory'
 from models import Hand
-from blackjack.blackjack_app import session
+from cards_app import session
 from lib import hit
 
 """
@@ -32,7 +32,6 @@ def count_blackjack(hand):
 def evaluate_hit(hand):
     game = hand.game
     player = hand.player
-    # turn = session.query(Turn).filter(Turn.game == game).filter(Turn.player == player).all()
     if hand.score > 21:
         # break, lose bet
         pass
@@ -44,12 +43,11 @@ def evaluate_hit(hand):
 
 
 def blackjack_dealer(game):
-    dealer = game.dealer
     dealer_hand = game.dealer.hands[0]
     count_blackjack(dealer_hand)
     # evaluating dealer's move
     if dealer_hand.score > 17:
-        dealer_hand.turn.is_turn = False
+        dealer_hand.is_turn = False
         blackjack_payout(game)
     # evaluate if dealer has any aces in his 17 making a soft 17 at which point he should hit
     elif dealer_hand.score == 17:
@@ -62,7 +60,7 @@ def blackjack_dealer(game):
     elif dealer_hand.score < 17:
         hit(dealer_hand, 1)
         blackjack_dealer(game)
-    if not dealer_hand.turn.is_turn:
+    if not dealer_hand.is_turn:
         blackjack_payout(game)
 
 
@@ -75,7 +73,7 @@ def blackjack_payout(game):
     for player in game.players:
         hands = session.query(Hand).filter(Hand.game == game).filter(Hand.player == player).all()
         for hand in hands:
-            if not hand.turn.is_expired:
+            if not hand.is_expired:
                 if hand.score < 21:
                     if game.dealer.hands[0].score < hand.score:
                         # Player wins, has high hand
@@ -103,5 +101,5 @@ def blackjack_payout(game):
                     elif len(hand.cards) == 2:
                         # player has blackjack
                         player.bank += hand.bet * 2.5
-                hand.turn.is_expired = True
+                hand.is_expired = True
 

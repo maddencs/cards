@@ -3,7 +3,7 @@ from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-from wtforms import Form, StringField, HiddenField
+from wtforms import Form, StringField, HiddenField, PasswordField
 from flask import request, url_for, redirect
 from flask.ext.login import UserMixin
 from urllib.parse import urlparse, urljoin
@@ -23,14 +23,16 @@ class GameRoom(Base):
 
 class Player(UserMixin, Base):
     __tablename__ = 'player'
-    username= Column('username', String(80))
+    email = Column('username', String(80))
     pid = Column(Integer, primary_key=True)
     hands = relationship('Hand', backref='player')
     cards = relationship('Card', backref='player')
     bank = Column('bank', Integer, default=100)
+    password = Column('password', String(255))
+    authenticated = Column(Boolean(create_constraint=False))
 
-    def __init__(self, username, password):
-        self.username = username
+    def __init__(self, email, password):
+        self.email = email
         self.password = password
 
     def is_active(self):
@@ -122,21 +124,21 @@ def get_redirect_target():
             return target
 
 
-class RedirectForm(Form):
-    next = HiddenField()
+# class RedirectForm(Form):
+#     next = HiddenField()
+#
+#     def __init__(self, *args, **kwargs):
+#         Form.__init__(self, *args, **kwargs)
+#         if not self.next.data:
+#             self.next.data = get_redirect_target() or ''
+#
+#     def redirect(self, endpoint='index', **values):
+#         if is_safe_url(self.next.data):
+#             return redirect(self.next.data)
+#         target = get_redirect_target()
+#         return redirect(target or url_for(endpoint, **values))
 
-    def __init__(self, *args, **kwargs):
-        Form.__init__(self, *args, **kwargs)
-        if not self.next.data:
-            self.next.data = get_redirect_target() or ''
 
-    def redirect(self, endpoint='index', **values):
-        if is_safe_url(self.next.data):
-            return redirect(self.next.data)
-        target = get_redirect_target()
-        return redirect(target or url_for(endpoint, **values))
-
-
-class LoginForm(RedirectForm):
+class LoginForm(Form):
     username = StringField('Username')
-    password = StringField('Password')
+    password = PasswordField('Password')

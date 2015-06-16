@@ -1,10 +1,11 @@
 from flask import Flask, request, redirect, render_template, url_for, flash, abort
-from flask.ext.login import login_required, login_user
+from flask.ext.login import login_required, login_user, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from config import db_connect, create_tables
 from models import GameRoom, Player, Game, LoginForm
 import json
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager
 
 app = Flask(__name__)
@@ -20,49 +21,42 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 @login_manager.request_loader
-def load_user(request):
+def load_user_from_request(request):
     token = request.headers.get('Authorization')
     if token is None:
         token = request.args.get('token')
 
     if token is not None:
-        username, password = token.split(':')
-        user_entry = session.query(Player).filter(Player.username == username)
+        email, password = token.split(':')
+        user_entry = session.query(Player).filter(Player.email == email)
         if (user_entry is not None):
             user = Player(user_entry[0], user_entry[1])
 
 @login_manager.user_loader
-def load_user(player_id):
-    return Player.query.get(player_id)
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     error = None
-#     if request.method == 'POST':
-#         if request.form['username'] != app.config['USERNAME']:
-#             error = 'Invalid username'
-#         elif request.form['password'] != app.config['PASSWORD']:
-#             error = 'Invalid password'
-#         else:
-#             session.logged_in = True
-#             flash('You were logged in')
-#             return redirect(url_for('game_page'))
-#     return render_template('login.html', error=error)
-
+def load_user(email):
+    if len(session.query(Player).filter(Player.email == email).all()) != 0:
+        return session.query(Player).filter(Player.email == email).all()[0]
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if form.validate():
-        print(form.username.data)
-        user = session.query(Player).filter(Player.username == form.username.data).all()[0]
-        login_user(user)
-        flash('Logged in successfully')
-        _next = request.args.get('next')
-        if not next(_next):
-            return abort(400)
-        return redirect(next or url_for('game_page'))
-    return render_template('login.html', form=form)
+    if request.method == "POST":
+        email = request.form['email']
+        password = request.form['password']
+        user = session.query(Player).filter(Player.email == email).all()[0]
+        if user and check_password_hash(user.password, password):
+            user.authenticated = True
+            login_user(user)
+            flash('Logged in succesfully.', 'success')
+            return redirect(next or url_for('game_page'))
+        else:
+            flash('Incorrect username or password', 'danger')
+            return redirect(url_for('login'))
+
+    if current_user.is_anonymous():
+        return render_template('login.html')
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/game_page', methods=['GET', 'POST'])
 def game_page():
@@ -79,19 +73,17 @@ def create_game(game_type):
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
+    logout_user()
     flash('You were logged out')
-    return redirect(url_for('show_entries'))
-
+    return redirect(url_for('index'))
 
 @app.route('/')
 def index():
     return render_template('login.html')
 
-
 @app.route('/room/<int:game_id>')
 @login_required
-def game_room(game_id):
+def game_room(game_id, methods=['POST', 'GET']):
     context = {}
     game = session.query(Game).filter(Game.id == game_id).all()[0]
     if game.type == 'Blackjack':
@@ -104,13 +96,29 @@ def game_stats(game_id):
     game = session.query(Game).filter(Game.id == game_id).all()[0]
     return json.dumps({'stats': game.stats}, indent=4, content_type='application/json')
 
-
 @app.route('/cards/bet/')
 @login_required
 def bet():
     bet_value = request.form['betValue']
     hand = request.form['hand_id']
     bet(hand, bet_value)
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == "POST":
+        email = request.form['email']
+        if len(session.query(Player).filter(Player.email == email).all()) < 1:
+            password = generate_password_hash(request.form['password'], method='pbkdf2:sha1', salt_length=8)
+            player = Player(email, password)
+            session.add(player)
+            session.commit()
+            login_user(player)
+            flash('Account created and logged in.', 'success')
+            return redirect(url_for('game_page'))
+        else:
+            flash('That username is taken.', 'error')
+            return redirect(url_for('register'))
+    return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

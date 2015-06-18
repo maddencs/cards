@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="container">
+    <h1>Please login</h1>
+    <br>
+
+    <form action="/login" method=post>
+        <dl>
+            <dt>Email:
+            <dd><input type=text name=email>
+            <dt>Password:
+            <dd><input type=password name=password>
+        </dl>
+        <p>
+            <input type=submit value=Login>
+            <input type=hidden value="{{ next or '' }}" name=next>
+    </form>
+    {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+    {% endif %}
+</div>
+</body>
+</html>

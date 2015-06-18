@@ -1,0 +1,14 @@
+#createGameDiv {
+    position: absolute;
+    float: right;
+    z-index: 2;
+}
+
+#newGameOptions {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: default;
+}

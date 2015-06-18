@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+<div id="createGameDiv">
+    <a id="newGameButton">New Game</a>
+    <div id="newGameOptions">
+        <ul>
+            <li>
+                Game Type
+                <select id="newGameType">
+                    <option value="Blackjack">Blackjack</option>
+                </select>
+            </li>
+            <li>
+                Deck Count(this does nothing)
+                <select id="deckCount">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                </select>
+            </li>
+        </ul>
+        <a id="createButton">Create</a>
+    </div>
+</div>
+    Games Available
+    <ul id="gameList">
+        {% for game in games %}
+            <li>Game {{ game.id }}</li>
+        {% endfor %}
+    </ul>
+</body>
+<script>
+    $('#newGameButton').click(function(){
+        $('#newGameOptions').toggle();
+    });
+    $('#createButton').click(function(){
+        window.open('/create_game/' + $('#newGameType').val(),'_self')
+    });
+</script>
+</html>

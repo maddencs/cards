@@ -3,10 +3,9 @@ from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
-from wtforms import Form, StringField, HiddenField, PasswordField
-from flask import request, url_for, redirect
+from wtforms import Form, StringField, PasswordField
 from flask.ext.login import UserMixin
-from urllib.parse import urlparse, urljoin
+
 Base = declarative_base()
 
 Game_Player = Table('game_player', Base.metadata,
@@ -14,26 +13,29 @@ Game_Player = Table('game_player', Base.metadata,
                     Column('player_id', Integer, ForeignKey('player.pid')), )
 
 
-class GameRoom(Base):
-    __tablename__ = 'gameroom'
-    id = Column('id', Integer, primary_key=True)
-    game = relationship('Game', uselist=False, backref='room')
+class Seat(Base):
+    __tablename__ = 'seating'
+    id = Column(Integer, primary_key=True)
+    seat_number = Column(Integer)
+    player_id = Column(Integer, ForeignKey('player.pid'))
+    player = relationship('Player', backref=backref('seats'), uselist=False)
     game_id = Column(Integer, ForeignKey('game.id'))
+
+    def __init__(self, seat, player):
+        self.player = player
+        self.seat_number = seat
 
 
 class Player(UserMixin, Base):
     __tablename__ = 'player'
-    email = Column('username', String(80))
+    email = Column('email', String(80))
+    username = Column('username', String(20), unique=True)
     pid = Column(Integer, primary_key=True)
     hands = relationship('Hand', backref='player')
     cards = relationship('Card', backref='player')
     bank = Column('bank', Integer, default=100)
     password = Column('password', String(255))
     authenticated = Column(Boolean(create_constraint=False))
-
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
 
     def is_active(self):
         """True, as all users are active."""
@@ -65,20 +67,62 @@ class Game(Base):
     is_over = Column('is_over', Boolean(create_constraint=False))
     dealer_turn = Column(Boolean(create_constraint=False))
     is_active = Column(Boolean(create_constraint=False))
+    seats = relationship('Seat', backref='game')
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, game_type):
+        self.type = game_type
         self.pot = 0
 
     @hybrid_property
     def stats(self):
-        result = []
+        result = {'game': {'id': self.id,
+                           'deck': {'cards': []},
+                           'dealer': {'hand': {
+                               'cards': [],
+                               'score': self.dealer.hands[0].score,
+                               'is_turn': self.dealer.hands[0].is_turn,
+                               'is_expired': self.dealer.hands[0].is_expired,
+                           }},
+                           'pot': self.pot},
+                  'seats': [],
+                  'players': []}
+        for card in self.deck.cards:
+            card_dict = {'seq': card.sequence,
+                         'value': card.value,
+                         'category': card.category}
+            result['game']['deck']['cards'].append(card_dict)
+        for seat in self.seats:
+            seat_dict = {'id': seat.id,
+                         'number': seat.seat_number,
+                         'player_id': seat.player.pid,
+                         }
+            result['seats'].append(seat_dict)
+        for card in self.dealer.hands[0].cards:
+            card_dict = {'seq': card.sequence,
+                         'value': card.value,
+                         'category': card.category}
+            result['game']['dealer']['hand']['cards'].append(card_dict)
         for player in self.players:
-            # hands = session.query(Hand).filter(Hand.game_id == self.id)\
-            #     .filter(Hand.player_id == player.id)
-            dict = {'player_name': player.username, 'bank': player.bank}
-            result.append(dict)
+            player_dict = {str(player.pid): {
+                'hands': [],
+                'bank': player.bank,
+            }
+            }
+            for hand in player.hands:
+                hand_dict = {'cards': [],
+                             'score': hand.score,
+                             'bet': hand.bet,
+                             'is_turn': hand.is_turn,
+                             'is_expired': hand.is_expired}
+                for card in hand.cards:
+                    card_dict = {'seq': card.sequence,
+                                 'value': card.value,
+                                 'category': card.category}
+                    hand_dict['cards'].append(card_dict)
+                player_dict[str(player.pid)]['hands'].append(hand_dict)
+            result['players'].append(player_dict)
         return result
+
 
 class Hand(Base):
     __tablename__ = 'hand'
@@ -95,8 +139,9 @@ class Hand(Base):
         self.bet = 0
         self.score = 0
 
+
 class Card(Base):
-    __tablename__ = 'Card'
+    __tablename__ = 'card'
     id = Column('id', Integer, primary_key=True)
     player_id = Column(Integer, ForeignKey('player.pid'))
     hand_id = Column(Integer, ForeignKey('hand.id'))
@@ -105,23 +150,24 @@ class Card(Base):
     category = Column(String(80))
     temp_value = Column(Integer)
 
+
 """
                 Login Form section
 """
 
-def is_safe_url(target):
-    ref_url = urlparse(request.host_url)
-    test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ('http', 'https') and \
-           ref_url.netloc == test_url.netloc
-
-
-def get_redirect_target():
-    for target in request.args.get('next'), request.referrer:
-        if not target:
-            continue
-        if is_safe_url(target):
-            return target
+# def is_safe_url(target):
+#     ref_url = urlparse(request.host_url)
+#     test_url = urlparse(urljoin(request.host_url, target))
+#     return test_url.scheme in ('http', 'https') and \
+#            ref_url.netloc == test_url.netloc
+#
+#
+# def get_redirect_target():
+#     for target in request.args.get('next'), request.referrer:
+#         if not target:
+#             continue
+#         if is_safe_url(target):
+#             return target
 
 
 # class RedirectForm(Form):

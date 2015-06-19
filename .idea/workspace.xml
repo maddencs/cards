@@ -2,111 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="584c1f7d-dbf1-4a4e-aff9-0459351877e8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/card_sprites.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club10.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club11.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club12.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club13.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club6.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/club9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond10.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond11.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond12.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond13.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond6.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/diamond9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart10.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart11.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart12.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart13.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart6.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/heart9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/joker1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/joker2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/joker3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/pokerfelt.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/python2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/python2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/python2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/python2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/python3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/python3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/python3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/python3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/python" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/python" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade1.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade10.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade11.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade12.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade13.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade2.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade3.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade4.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade5.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade6.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade7.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade8.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/spade9.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/cards/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/activate.csh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/activate.csh" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/activate.fish" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/activate.fish" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/activate" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/activate" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/activate_this.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/activate_this.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/blackjack_room.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/button_prototypes.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/libs/card_handling.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/css/card_sprites.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/easy_install-2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/easy_install-2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/easy_install-3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/easy_install-3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/easy_install" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/easy_install" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/game_list_item.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/game_page.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/login.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/main.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/pip2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/pip2.7" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/pip2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/pip2" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/pip3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/pip3.4" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/pip3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/pip3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/bin/pip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/venv/local/bin/pip" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/pokerchip.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/templates/register.html" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/lib.py" afterPath="$PROJECT_DIR$/lib_dir/card_actions.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/libs/card_handling.js" afterPath="$PROJECT_DIR$/lib_dir/card_handling.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/blackjack_room.html" afterPath="$PROJECT_DIR$/templates/blackjack_room.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cards_app.py" afterPath="$PROJECT_DIR$/cards_app.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models.py" afterPath="$PROJECT_DIR$/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/blackjack/rules.py" afterPath="$PROJECT_DIR$/blackjack/rules.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/blackjack/tests.py" afterPath="$PROJECT_DIR$/blackjack/tests.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cards.iws" />
@@ -124,9 +26,9 @@
     <SUITE FILE_PATH="coverage/cards$Unittest_CardsTestCase_test_blackjack_payout.coverage" NAME="Unittest CardsTestCase.test_blackjack_payout Coverage Results" MODIFIED="1433694444970" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/blackjack" />
     <SUITE FILE_PATH="coverage/cards$Unittests_in_tests.coverage" NAME="Unittests in tests Coverage Results" MODIFIED="1433898517985" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cards$Unittests_in_CardsTestCase.coverage" NAME="Unittests in CardsTestCase Coverage Results" MODIFIED="1433477748552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/blackjack" />
-    <SUITE FILE_PATH="coverage/cards$cards.coverage" NAME="cards Coverage Results" MODIFIED="1434661491527" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/cards$games.coverage" NAME="games Coverage Results" MODIFIED="1433442527457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/cards$cards.coverage" NAME="cards Coverage Results" MODIFIED="1434739986144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/cards$boolean_value_quiz.coverage" NAME="boolean_value_quiz Coverage Results" MODIFIED="1433448268244" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Downloads" />
+    <SUITE FILE_PATH="coverage/cards$games.coverage" NAME="games Coverage Results" MODIFIED="1433442527457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/cards$Unittest_CardsTestCase_test_blackjack_dealer.coverage" NAME="Unittest CardsTestCase.test_blackjack_dealer Coverage Results" MODIFIED="1433693777174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/blackjack" />
     <SUITE FILE_PATH="coverage/cards$Unittest_CardsTestCase_test_blackjack_player_wins.coverage" NAME="Unittest CardsTestCase.test_blackjack_player_wins Coverage Results" MODIFIED="1433693683688" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/blackjack" />
   </component>
@@ -142,10 +44,10 @@
       <file leaf-file-name="cards_app.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cards_app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.7336683">
-              <caret line="69" column="41" selection-start-line="69" selection-start-column="41" selection-end-line="69" selection-end-column="41" />
+            <state vertical-scroll-proportion="0.7448166">
+              <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
               <folding>
-                <element signature="e#0#82#0" expanded="true" />
+                <element signature="e#0#91#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -155,9 +57,10 @@
         <entry file="file://$PROJECT_DIR$/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="69" column="24" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
+              <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
               <folding>
                 <element signature="e#20#94#0" expanded="true" />
+                <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -166,18 +69,8 @@
       <file leaf-file-name="blackjack_room.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="14.454545">
-              <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="game_page.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/game_page.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1304348">
-              <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+            <state vertical-scroll-proportion="-15.869565">
+              <caret line="135" column="0" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -225,8 +118,10 @@
         <option value="$USER_HOME$/Downloads/Color_52_Faces_v.2.0.svg" />
         <option value="$PROJECT_DIR$/libs/card_handling.js" />
         <option value="$PROJECT_DIR$/templates/cards.svg" />
-        <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/static/css/card_sprites.css" />
+        <option value="$PROJECT_DIR$/libs/card_actions.py" />
+        <option value="$PROJECT_DIR$/lib_dir/card_actions.py" />
+        <option value="$PROJECT_DIR$/models.py" />
         <option value="$PROJECT_DIR$/templates/blackjack_room.html" />
         <option value="$PROJECT_DIR$/cards_app.py" />
       </list>
@@ -240,9 +135,9 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="55" />
+    <option name="x" value="53" />
     <option name="y" value="52" />
-    <option name="width" value="1333" />
+    <option name="width" value="991" />
     <option name="height" value="1028" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -275,10 +170,6 @@
               <option name="myItemId" value="cards" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -300,53 +191,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cards" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="libs" />
+              <option name="myItemId" value="lib_dir" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -387,11 +232,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/libs" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/templates" />
       <recent name="$PROJECT_DIR$/static/card_images" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/cards" />
     </key>
   </component>
   <component name="RunManager" selected="Python.cards">
@@ -785,7 +630,13 @@
       <option name="project" value="LOCAL" />
       <updated>1434487531645</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added card sprites">
+      <created>1434662335699</created>
+      <option name="number" value="00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1434662335699</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -798,12 +649,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="52" width="1333" height="1028" extended-state="4" />
+    <frame x="53" y="52" width="991" height="1028" extended-state="4" />
     <editor active="false" />
     <layout>
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38848168" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32725322" sideWeight="0.5045872" order="11" side_tool="true" content_ui="tabs" />
@@ -812,9 +663,9 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17016317" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21798941" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32939914" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32725322" sideWeight="0.49541286" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2950644" sideWeight="0.49541286" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -842,41 +693,175 @@
     <MESSAGE value="updated code to match new schema" />
     <MESSAGE value="messed with directory and views, nothing major" />
     <MESSAGE value="worked on views" />
-    <option name="LAST_COMMIT_MESSAGE" value="worked on views" />
+    <MESSAGE value="added card sprites" />
+    <option name="LAST_COMMIT_MESSAGE" value="added card sprites" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/lib.py</url>
-          <line>52</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/blackjack/tests.py</url>
-          <line>85</line>
+          <line>86</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="8" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/lib.py">
+    <entry file="file://$PROJECT_DIR$/cards_app.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="10" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="10" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#20#46#0" expanded="false" />
+            <element signature="e#0#91#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/views.py">
+    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="19" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+          <folding>
+            <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cards_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#91#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+          <folding>
+            <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cards_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#91#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+          <folding>
+            <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cards_app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#91#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="0" selection-start-line="70" selection-start-column="0" selection-end-line="70" selection-end-column="0" />
+          <folding>
+            <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="115" column="0" selection-start-line="115" selection-start-column="0" selection-end-line="115" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib_dir/card_actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="10" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -886,6 +871,7 @@
           <caret line="86" column="0" selection-start-line="86" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
           <folding>
             <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -894,9 +880,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="148" column="53" selection-start-line="148" selection-start-column="53" selection-end-line="148" selection-end-column="53" />
-          <folding>
-            <element signature="e#20#29#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -907,20 +891,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib.py">
+    <entry file="file://$PROJECT_DIR$/lib_dir/card_actions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="36" column="10" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="10" />
-          <folding>
-            <element signature="e#20#46#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="19" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -930,6 +904,7 @@
           <caret line="42" column="20" selection-start-line="42" selection-start-column="20" selection-end-line="42" selection-end-column="20" />
           <folding>
             <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -960,9 +935,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="179" column="32" selection-start-line="179" selection-start-column="32" selection-end-line="179" selection-end-column="32" />
-          <folding>
-            <element signature="e#20#29#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -973,20 +946,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib.py">
+    <entry file="file://$PROJECT_DIR$/lib_dir/card_actions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="36" column="10" selection-start-line="36" selection-start-column="6" selection-end-line="36" selection-end-column="10" />
-          <folding>
-            <element signature="e#20#46#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="19" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
         </state>
       </provider>
     </entry>
@@ -996,6 +959,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1004,9 +968,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="179" column="32" selection-start-line="179" selection-start-column="32" selection-end-line="179" selection-end-column="32" />
-          <folding>
-            <element signature="e#20#29#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1022,15 +984,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#82#0" expanded="true" />
+            <element signature="e#0#91#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="49" selection-start-line="0" selection-start-column="49" selection-end-line="0" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -1040,6 +995,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -1073,20 +1029,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Downloads/boolean_value_quiz.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37603992">
-          <caret line="43" column="41" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blackjack/rules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="99" column="50" selection-start-line="99" selection-start-column="50" selection-end-line="99" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/lib/python3.4/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1094,86 +1036,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/cards/lib/python3.4/site-packages/sqlalchemy/orm/instrumentation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="348" column="0" selection-start-line="348" selection-start-column="0" selection-end-line="348" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/cards/lib/python3.4/site-packages/sqlalchemy/orm/mapper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2807" column="0" selection-start-line="2807" selection-start-column="0" selection-end-line="2807" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/cards/lib/python3.4/site-packages/sqlalchemy/event/attr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="256" column="0" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/cards/lib/python3.4/site-packages/sqlalchemy/orm/state.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="302" column="0" selection-start-line="302" selection-start-column="0" selection-end-line="302" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="53" column="13" selection-start-line="53" selection-start-column="12" selection-end-line="53" selection-end-column="13" />
-          <folding>
-            <element signature="e#20#46#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
-          <folding>
-            <element signature="e#20#29#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/cards/lib/python3.4/site-packages/flask_login.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8305648">
-          <caret line="676" column="0" selection-start-line="676" selection-start-column="0" selection-end-line="676" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/pokerchip.svg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.38918918">
-          <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.0">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#82#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-3.5">
           <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#36#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1181,7 +1047,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1189,7 +1054,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.3636364">
           <caret line="5" column="40" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1197,7 +1061,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1208,58 +1071,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Downloads/Color_52_Faces_v.2.0.svg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="681.0">
-          <caret line="4573" column="173" selection-start-line="4573" selection-start-column="173" selection-end-line="4573" selection-end-column="173" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/cards.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Documents/drawing.svg">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7487437">
-          <caret line="56" column="31" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/card_handling.js">
+    <entry file="file://$PROJECT_DIR$/lib_dir/card_handling.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="69" column="24" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
-          <folding>
-            <element signature="e#20#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/card_sprites.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9045226">
-          <caret line="36" column="52" selection-start-line="36" selection-start-column="52" selection-end-line="36" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="14.454545">
-          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1267,16 +1082,60 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.1304348">
           <caret line="17" column="17" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blackjack/rules.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="99" column="50" selection-start-line="99" selection-start-column="50" selection-end-line="99" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib_dir/card_actions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="4" column="33" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="33" />
+          <caret line="15" column="25" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="25" />
+          <caret line="48" column="13" selection-start-line="48" selection-start-column="6" selection-end-line="48" selection-end-column="13" />
+          <caret line="53" column="13" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="13" />
+          <caret line="64" column="13" selection-start-line="64" selection-start-column="6" selection-end-line="64" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blackjack/tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
+          <folding>
+            <element signature="e#20#94#0" expanded="true" />
+            <marker date="1434739439834" expanded="true" signature="6878:6879" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/blackjack_room.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.869565">
+          <caret line="135" column="0" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cards_app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7336683">
-          <caret line="69" column="41" selection-start-line="69" selection-start-column="41" selection-end-line="69" selection-end-column="41" />
+        <state vertical-scroll-proportion="0.7448166">
+          <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
           <folding>
-            <element signature="e#0#82#0" expanded="true" />
+            <element signature="e#0#91#0" expanded="true" />
           </folding>
         </state>
       </provider>

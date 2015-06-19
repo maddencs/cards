@@ -2,7 +2,7 @@ __author__ = 'cory'
 from random import randint
 
 from models import Card, Hand
-from cards_app import session
+# # from cards_app import session
 
 
 def piece_maker(category, values, decks):
@@ -13,7 +13,7 @@ def piece_maker(category, values, decks):
             for v in values:
                 p = Card(category=c, sequence=(values.index(v) + 1), value=v)
                 result.append(p)
-                session.add(p)
+                # session.add(p)
         i += 1
     return result
 
@@ -46,12 +46,12 @@ def hit(hand, count):
         player.cards.append(card)
         hand.cards.append(card)
         i += 1
-    session.commit()
+    # session.commit()
 
 def bet(hand, points):
     hand.player.bank -= points
     hand.bet += points
-    session.commit()
+    # session.commit()
 
 def split(hand):
     player = hand.player
@@ -62,4 +62,4 @@ def split(hand):
     player.hands.append(new_hand)
     new_hand.cards.append(game.deck.cards.pop())
     hand.cards.append(game.deck.cards.pop())
-    session.flush()
+    # session.flush()

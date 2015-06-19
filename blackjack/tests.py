@@ -2,9 +2,10 @@ __author__ = 'cory'
 import os
 import unittest
 import tempfile
+
 import cards_app
 from models import Player, Game, Card, Hand
-from lib import piece_maker, shuffle, hit, bet, split
+from lib_dir.card_actions import piece_maker, shuffle, hit, bet, split
 from rules import count_blackjack, evaluate_hit, blackjack_dealer, blackjack_payout
 
 suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']

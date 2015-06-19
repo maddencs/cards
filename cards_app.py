@@ -1,12 +1,16 @@
-from flask import Flask, request, redirect, render_template, url_for, flash, abort
+from flask import Flask, request, redirect, render_template, url_for, flash, abort, jsonify
 from flask.ext.login import login_required, login_user, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from config import db_connect, create_tables
-from models import GameRoom, Player, Game, LoginForm
+from models import Player, Game, LoginForm, Hand, Seat
 import json
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager
+from lib_dir.card_actions import hit, piece_maker
+
+suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
+card_values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -66,7 +70,11 @@ def game_page():
 @app.route('/create_game/<string:game_type>', methods=['GET'])
 def create_game(game_type):
     if request.method == 'GET':
+        dealer = Player()
         game = Game(game_type)
+        game.dealer = dealer
+        dealer_hand = Hand()
+        dealer.hands.append(dealer_hand)
         game.players.append(current_user)
         session.add(game)
         session.commit()
@@ -82,22 +90,16 @@ def logout():
 def index():
     return render_template('login.html')
 
-@app.route('/room/<int:game_id>')
+@app.route('/room/<int:game_id>', methods=['POST', 'GET'])
 @login_required
-def game_room(game_id, methods=['POST', 'GET']):
+def game_room(game_id):
     context = {}
     game = session.query(Game).filter(Game.id == game_id).all()[0]
     context['game'] = game
     if game.type == 'Blackjack':
         return render_template('blackjack_room.html', game=game)
 
-@app.route('/game_stats/<int:game_id>', methods=['GET'])
-def game_stats(game_id):
-    game = session.query(Game).filter(Game.id == game_id).all()[0]
-    print('stats', game)
-    return json.dumps({'stats': game.stats}, indent=4, content_type='application/json')
-
-@app.route('/cards/bet/')
+@app.route('/bet/')
 @login_required
 def bet():
     bet_value = request.form['betValue']
@@ -110,7 +112,9 @@ def register():
         email = request.form['email']
         if len(session.query(Player).filter(Player.email == email).all()) < 1:
             password = generate_password_hash(request.form['password'], method='pbkdf2:sha1', salt_length=8)
-            player = Player(email, password)
+            player = Player()
+            player.email = email
+            player.password = password
             player.authenticated = True
             session.add(player)
             session.commit()
@@ -122,5 +126,41 @@ def register():
             return redirect(url_for('register'))
     return render_template('register.html')
 
+@app.route('/blackjack_deal/<int:game_id>', methods=['POST', 'GET'])
+def blackjack_deal(game_id):
+    deck = Hand()
+    deck.cards = piece_maker(suits, card_values, 1)
+    game = session.query(Game).filter(Game.id == game_id).all()[0]
+    game.deck = deck
+    session.commit()
+    for player in game.players:
+        hand = Hand()
+        player.hands.append(hand)
+        game.hands.append(hand)
+        hit(hand, 2)
+        session.commit()
+    return url_for('game_stats/')
+
+@app.route('/game_stats/<int:game_id>', methods=['POST', 'GET'])
+def game_stats(game_id):
+    game = session.query(Game).filter(Game.id == game_id).all()[0]
+    return jsonify(game.stats)
+
+@app.route('/game/<int:game_id>/seat/<int:seat_number>', methods=['POST', 'GET'])
+def sit(game_id, seat_number):
+    if request.method == 'POST':
+        seat = Seat(seat_number, current_user)
+        game = session.query(Game).filter(Game.id == game_id).all()[0]
+        game.seats.append(seat)
+        session.commit()
+    else:
+        seat = session.query(Seat).filter(Seat.seat_number == seat_number).filter(Seat.game_id == game_id).all()[0]
+        seat_dict = {'id': seat.id,
+                     'number': seat.seat_number,
+                     'player_id': seat.player.pid,
+                     }
+        return jsonify(seat_dict)
+
 if __name__ == '__main__':
     app.run(debug=True)
+

@@ -1,7 +1,7 @@
 __author__ = 'cory'
 from models import Hand
 from cards_app import session
-from lib import hit
+from lib_dir.card_actions import hit
 
 """
 

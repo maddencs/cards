@@ -21,9 +21,15 @@ class Seat(Base):
     player = relationship('Player', backref=backref('seats'), uselist=False)
     game_id = Column(Integer, ForeignKey('game.id'))
 
-    def __init__(self, seat, player):
-        self.player = player
+    def __init__(self, seat):
         self.seat_number = seat
+
+    @hybrid_property
+    def details(self):
+        return {'id': self.id,
+                'seat_number': self.seat_number,
+                'player_id': self.player_id,
+                'game_id': self.game_id}
 
 
 class Player(UserMixin, Base):
@@ -36,6 +42,13 @@ class Player(UserMixin, Base):
     bank = Column('bank', Integer, default=100)
     password = Column('password', String(255))
     authenticated = Column(Boolean(create_constraint=False))
+
+    @hybrid_property
+    def details(self):
+        return {'email': self.email,
+                'username': self.username,
+                'pid': self.pid,
+                'bank': self.bank}
 
     def is_active(self):
         """True, as all users are active."""
@@ -68,6 +81,7 @@ class Game(Base):
     dealer_turn = Column(Boolean(create_constraint=False))
     is_active = Column(Boolean(create_constraint=False))
     seats = relationship('Seat', backref='game')
+    current_turn = Column(Integer)
 
     def __init__(self, game_type):
         self.type = game_type
@@ -76,6 +90,9 @@ class Game(Base):
     @hybrid_property
     def stats(self):
         result = {'game': {'id': self.id,
+                           'is_over': self.is_over,
+                           'is_active': self.is_active,
+                           'current_turn': self.current_turn,
                            'deck': {'cards': []},
                            'dealer': {'hand': {
                                'cards': [],
@@ -84,43 +101,29 @@ class Game(Base):
                                'is_expired': self.dealer.hands[0].is_expired,
                            }},
                            'pot': self.pot},
-                  'seats': [],
-                  'players': []}
-        for card in self.deck.cards:
-            card_dict = {'seq': card.sequence,
-                         'value': card.value,
-                         'category': card.category}
-            result['game']['deck']['cards'].append(card_dict)
-        for seat in self.seats:
-            seat_dict = {'id': seat.id,
-                         'number': seat.seat_number,
-                         'player_id': seat.player.pid,
-                         }
-            result['seats'].append(seat_dict)
-        for card in self.dealer.hands[0].cards:
-            card_dict = {'seq': card.sequence,
-                         'value': card.value,
-                         'category': card.category}
-            result['game']['dealer']['hand']['cards'].append(card_dict)
+                  'seats': {},
+                  'players': {}}
+        if self.deck:
+            for card in self.deck.cards:
+                card_dict = {'seq': card.sequence,
+                             'value': card.value,
+                             'category': card.category}
+                result['game']['deck']['cards'].append(card_dict)
+        if self.seats:
+            for seat in self.seats:
+                result['seats'][str(seat.seat_number)] = seat.details
+        if self.dealer.hands[0].cards:
+            for card in self.dealer.hands[0].cards:
+                card_dict = {'seq': card.sequence,
+                             'value': card.value,
+                             'category': card.category}
+                result['game']['dealer']['hand']['cards'].append(card_dict)
         for player in self.players:
-            player_dict = {str(player.pid): {
-                'hands': [],
-                'bank': player.bank,
-            }
-            }
+            result['players'][str(player.pid)] = player.details
+            result['players'][str(player.pid)]['hands'] = {}
             for hand in player.hands:
-                hand_dict = {'cards': [],
-                             'score': hand.score,
-                             'bet': hand.bet,
-                             'is_turn': hand.is_turn,
-                             'is_expired': hand.is_expired}
-                for card in hand.cards:
-                    card_dict = {'seq': card.sequence,
-                                 'value': card.value,
-                                 'category': card.category}
-                    hand_dict['cards'].append(card_dict)
-                player_dict[str(player.pid)]['hands'].append(hand_dict)
-            result['players'].append(player_dict)
+                if hand.game_id == self.id:
+                    result['players'][str(player.pid)]['hands'][str(hand.id)] = hand.details
         return result
 
 
@@ -134,6 +137,19 @@ class Hand(Base):
     score = Column('score', Integer)
     is_turn = Column(Boolean(create_constraint=False))
     is_expired = Column(Boolean(create_constraint=False))
+
+    @hybrid_property
+    def details(self):
+        result = {'game_id': self.game_id,
+                  'id': self.id,
+                  'cards': [],
+                  'bet': self.bet,
+                  'score': self.score,
+                  'is_turn': self.is_turn,
+                  'is_expired': self.is_expired}
+        for card in self.cards:
+            result['cards'].append(card.details)
+        return result
 
     def __init__(self):
         self.bet = 0
@@ -149,6 +165,16 @@ class Card(Base):
     sequence = Column(Integer)
     category = Column(String(80))
     temp_value = Column(Integer)
+
+    @hybrid_property
+    def details(self):
+        return {'id': self.id,
+                'player_id': self.player_id,
+                'hand_id': self.hand_id,
+                'value': self.value,
+                'sequence': self.sequence,
+                'category': self.category,
+                'temp_value': self.temp_value}
 
 
 """

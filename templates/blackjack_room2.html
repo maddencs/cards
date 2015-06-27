@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/card_sprites.css">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body {
+            background-image: url("/static/pokerfelt.jpg");
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="gameActions">
+    <button id="startGame">Start Game</button>
+    <span id="start"></span>
+</div>
+
+<div id="seatSelection">
+    <div class="seatDiv" seatNumber=1 player=""></div>
+
+    <div class="seatDiv" seatNumber=2 player=""></div>
+
+    <div class="seatDiv" seatNumber=3 player=""></div>
+
+    <div class="seatDiv" seatNumber=4 player=""></div>
+
+    <div class="seatDiv" seatNumber=5 player=""></div>
+
+</div>
+
+</body>
+
+<script>
+    window.playerTurn = false;
+    window.callback = initDraw;
+    window.gameActive = false;
+
+    var moveRequest = function(moveType, requestValue){
+        this.moveType = moveType;
+        this.value = requestValue;
+    };
+
+    var readyListener = function(){
+        var seat = $(e.target).parent().attr('seat');
+        $.post('/seat/ready/' + seat);
+    };
+
+    var sitListener = function (e) {
+        $(e.target).parent().siblings().remove();
+        $(e.target).parent().attr("player", "{{ current_user.pid }}");
+        var sitSpans = document.querySelectorAll("span[id='sitSpan']");
+        $(sitSpans).remove();
+        var parentDiv = $(e.target).parent();
+        console.log(parentDiv);
+        var readyButton = document.createElement('button');
+        var seat = parentDiv.attr('seatNumber');
+        readyButton.addEventListener('click', readyListener);
+        readyButton.innerHTML = 'Ready';
+        readyButton.setAttribute('seat', $(e.target).parent().attr('seat'));
+        parentDiv.append(readyButton);
+        $.post('/game/{{ game.id }}/seat/' + seat);
+    };
+
+    var addSeats = function (data) {
+        var seats = data['seats'];
+        for (var i = 0; i < Object.keys(seats).length; i++) {
+            var seatStr = "div[seatNumber='" + String(i + 1) + "']";
+            var seat = document.querySelectorAll(seatStr)[0];
+            seat.setAttribute('player', seats[String(1+i)]['player_id']);
+            {# if no one is sitting here #}
+            if (seat.getAttribute('player') == "null") {
+                var sitSpan = document.createElement('span');
+                sitSpan.id = 'sitSpan';
+                seat.appendChild(sitSpan);
+                sitSpan.innerHTML = 'Sit in seat ' + (1 + i).toString();
+                sitSpan.addEventListener('click', sitListener);
+            } else {
+                {# if someone is sitting here that isn't the player #}
+                if (seat.getAttribute('player') != {{ current_user.pid }}) {
+                    var playerString = String(seats[i]['player_id']);
+                    var player = data['players'][playerString];
+                    var otherPlayerDiv = document.createElement('div');
+                    var otherPlayerHands = document.createElement('div');
+                    var otherPlayerName = document.createElement('span');
+                    var otherPlayerBank = document.createElement('span');
+                    otherPlayerName.innerHTML = player['username'];
+                    otherPlayerBank.innerHTML = player['bank'];
+                    otherPlayerDiv.appendChild(otherPlayerName);
+                    otherPlayerDiv.appendChild(otherPlayerBank);
+                    otherPlayerDiv.appendChild(otherPlayerHands);
+
+                    for (var h = 0; h < player['hands'].length; h++) {
+                        var thisHandDiv = document.createElement('div');
+                        var thisBetSpan = document.createElement('span');
+                        otherPlayerHands.appendChild(thisHandDiv);
+
+                        for (var c = 0; c < player['hands'][h]['cards'].length; c++) {
+                            var thisCardDiv = document.createElement('div');
+                            var thisCard = player['hands'][h]['cards'][c];
+                            var spriteString = 'sprite' + thisCard['category'] + thisCard['value'];
+                            console.log(spriteString);
+                            thisCardDiv.classList.add(spriteString);
+                            thisHandDiv.appendChild(thisCard);
+                        }
+                        thisHandDiv.appendChild(thisBetSpan);
+                        thisBetSpan.innerHTML = player['hands'][h]['bet'];
+                    }
+                } else {
+                    {# if this is the player's seat #}
+                    var siblings = $(seatStr).siblings();
+                    siblings.remove();
+                    var player = data['players'][{{ current_user.pid }}];
+                    var playerHandsDiv = document.createElement('div');
+                    {# if the player has hands #}
+                    if (player['hands'].length == 0) {
+                        if (data['game']['active']) {
+                            var playerSeat = document.querySelector("div[player={{ current_user.pid }}]");
+                            if (document.playerTurn) {
+                                {# it's the player's turn
+                                start timer for player move
+                                maybe store time in db so countdown counts
+                                10s from that and not page load #}
+                            } else {
+                                {# do nothing until player's turn #}
+                            }
+                        } else {
+                            {# game starting soon, start timer #}
+                            var timerSpan = document.createElement('span');
+                            var countDown = 10;
+
+                            function tick() {
+                                setTimeout(tick, 1000);
+                                countDown--;
+                                timerSpan.innerHTML = 'You have ' + countDown + ' seconds until the game starts without you.';
+                                if (countDown == 0) {
+                                    $.get('/blackjack_deal/' + {{ game.id }})
+                                            .done(function (data) {
+                                                console.log(data);
+                                            })
+                                            .fail(function () {
+                                                console.log('request failed');
+                                            })
+                                }
+                            }
+
+                            tick();
+                            seat.appendChild(timerSpan);
+
+                        }
+                    } else {
+                        for (var h = 0; h < player['hands'].length; h++) {
+                            var hand = player['hands'][h];
+                            var handDiv = handBox(hand);
+                            var cardsDiv = handDiv.querySelector("div[class='cards']");
+                            playerHandsDiv.appendChild(handDiv);
+                            for (var c = 0; c < hand['cards'].length; c++) {
+                                var card = hand['cards'][c];
+                                var cardDiv = document.createElement('div');
+                                var spriteString = 'sprite' + card['category'] + card['value'];
+                                console.log(spriteString);
+                                cardDiv.classList.add(spriteString);
+                                cardsDiv.appendChild(cardDiv);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    $('#startGame').click(function () {
+        $.get('/blackjack_deal/' + {{ game.id }})
+                .done(function (data) {
+                    console.log(data);
+                })
+                .fail(function () {
+                    console.log('request failed');
+                })
+    });
+
+    var betListener = function (e) {
+        var betValue = $('input:first').val();
+        var handID = e.target.getAttribute('handID');
+        if (betValue > {{ current_user.bank }}) {
+            alert('Insufficient funds...');
+        } else {
+            $.get('/bet', {handID: handID, bet: betValue});
+        }
+    };
+
+    var handBox = function (hand) {
+        var handDiv = document.createElement('div');
+        var cardDiv = document.createElement('div');
+        var moveDiv = document.createElement('div');
+        var hitSpan = document.createElement('span');
+        var standSpan = document.createElement('span');
+        var splitSpan = document.createElement('span');
+        var betDiv = document.createElement('div');
+        var betForm = document.createElement('form');
+        var betLabel = document.createElement('label');
+        var betInput = document.createElement('input');
+        var betSubmit = document.createElement('input');
+        betForm.addEventListener('submit', betListener);
+        betForm.setAttribute('handID', hand['id']);
+        cardDiv.classList.add('cards');
+        betDiv.appendChild(betForm);
+        betForm.appendChild(betLabel);
+        betForm.appendChild(betInput);
+        betForm.appendChild(betSubmit);
+        betInput.setAttribute('name', 'betValue');
+        betInput.setAttribute('type', 'number');
+        betSubmit.setAttribute('type', 'submit');
+        betSubmit.setAttribute('value', 'Bet');
+        handDiv.appendChild(cardDiv);
+        handDiv.appendChild(moveDiv);
+        moveDiv.appendChild(hitSpan);
+        moveDiv.appendChild(standSpan);
+        moveDiv.appendChild(splitSpan);
+        handDiv.setAttribute('handID', hand['id']);
+        return handDiv;
+    };
+
+
+    $('#betForm').submit(function () {
+        var betValue = $('#betValue').value;
+        var handID = this.getAttribute('hand_id');
+    });
+
+    var initDraw = function (data) {
+        if(!data['game']['active']){
+            addSeats(data);
+        }
+    };
+
+    var request = new XMLHttpRequest();
+
+    var statusCheck = function (data) {
+        var game = data['game'];
+        var player = data['players'][{{ current_user.pid }}];
+        $.post('/status_check/{{ game.id }}', {'date': (new Date()).toUTCString()}, function(data){
+
+            var seatString = "div[seatNumber=" + data['game']['current_turn'] + "]";
+            var seat = $(seatString);
+            if(seat.attr('player') == {{ current_user.pid }}){
+                window.playerTurn = false;
+            } else {
+                window.playerTurn = true;
+            }
+        });
+        var seatStr = "div[seatNumber=" + game['current_turn'] + "]";
+        var seat = $(seatStr);
+        if(seat){
+            if(seat.attr('player') == {{ current_user.pid }}) {
+                window.playerTurn = true;
+            }
+        }
+    };
+var updateData = function(){
+    var request = new XMLHttpRequest();
+    var onRequestChange = function () {
+        if ((request.readyState == 4) && (request.status == 200)) {
+            var data = JSON.parse(request.responseText);
+            var a = JSON.stringify(data);
+            var b = JSON.stringify(window.currentData);
+            $('#start').html = 'Game started ' + data['time_delta'] + ' ago';
+            {# if the data is the same don't do anything #}
+            if(a != b){
+                window.currentData = data;
+                window.callback(data);
+            } else {
+                console.log(a == b);
+            }
+        }
+    };
+
+    var getData = function () {
+        request.onreadystatechange = onRequestChange;
+        request.open('GET', '/game_stats/{{ game.id }}', true);
+        request.send();
+    };
+
+    var dataTimer = setInterval(function(){
+        getData();
+    }, 1000)
+};
+
+
+    {# request to constantly check for new moves or game status #}
+
+
+
+
+    var statCheckTimer = setInterval(function () {
+        window.callback = statusCheck;
+        getData();
+    }, 1000);
+
+</script>
+
+<style>
+    #gameActions {
+        position: fixed;
+        right: 0;
+    }
+
+    .handDiv {
+        display: none;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+</html>

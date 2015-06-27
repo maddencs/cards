@@ -1,0 +1,12 @@
+    #gameActions {
+        position: fixed;
+        right: 0;
+    }
+
+    .handDiv {
+        display: none;
+    }
+
+    .hidden {
+        display: none;
+    }

@@ -31,8 +31,8 @@
 </div>
     Games Available
     <ul id="gameList">
-        {% for game in games %}
-            <li>Game {{ game.id }}</li>
+        {% for room in rooms %}
+            <li><a href="/room/{{ room.id }}">Room {{ room.id }}</a></li>
         {% endfor %}
     </ul>
 </body>
@@ -41,7 +41,7 @@
         $('#newGameOptions').toggle();
     });
     $('#createButton').click(function(){
-        window.open('/create_game/' + $('#newGameType').val(),'_self')
+        window.open('/create_game/' + $('#newGameType').val() + '/0','_self')
     });
 </script>
 </html>

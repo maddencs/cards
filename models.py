@@ -1,16 +1,24 @@
 __author__ = 'cory'
-from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean
+from sqlalchemy import Table, Column, Integer, ForeignKey, String, Boolean, DateTime
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from wtforms import Form, StringField, PasswordField
 from flask.ext.login import UserMixin
 
+
 Base = declarative_base()
 
 Game_Player = Table('game_player', Base.metadata,
                     Column('game_id', Integer, ForeignKey('game.id')),
                     Column('player_id', Integer, ForeignKey('player.pid')), )
+
+
+class GameRoom(Base):
+    __tablename__ = 'gameroom'
+    id = Column(Integer, primary_key=True)
+    current_game_id = Column(Integer, ForeignKey('game.id'))
+    current_game = relationship('Game', backref=backref('room'), uselist=False)
 
 
 class Seat(Base):
@@ -20,6 +28,9 @@ class Seat(Base):
     player_id = Column(Integer, ForeignKey('player.pid'))
     player = relationship('Player', backref=backref('seats'), uselist=False)
     game_id = Column(Integer, ForeignKey('game.id'))
+    ready = Column(Boolean(create_constraint=True))
+    time = Column(DateTime(timezone=False))
+    expired = Column(Boolean(create_constraint=False))
 
     def __init__(self, seat):
         self.seat_number = seat
@@ -27,6 +38,9 @@ class Seat(Base):
     @hybrid_property
     def details(self):
         return {'id': self.id,
+                'time': self.time,
+                'expired': self.expired,
+                'ready': self.ready,
                 'seat_number': self.seat_number,
                 'player_id': self.player_id,
                 'game_id': self.game_id}
@@ -34,10 +48,10 @@ class Seat(Base):
 
 class Player(UserMixin, Base):
     __tablename__ = 'player'
-    email = Column('email', String(80))
+    email = Column('email', String(80), unique=True)
     username = Column('username', String(20), unique=True)
     pid = Column(Integer, primary_key=True)
-    hands = relationship('Hand', backref='player')
+    # hands = relationship('Hand', backref='player')
     cards = relationship('Card', backref='player')
     bank = Column('bank', Integer, default=100)
     password = Column('password', String(255))
@@ -79,9 +93,10 @@ class Game(Base):
     pot = Column('pot', Integer)
     is_over = Column('is_over', Boolean(create_constraint=False))
     dealer_turn = Column(Boolean(create_constraint=False))
-    is_active = Column(Boolean(create_constraint=False))
+    active = Column(Boolean(create_constraint=False))
     seats = relationship('Seat', backref='game')
     current_turn = Column(Integer)
+    time = Column(DateTime(timezone=False))
 
     def __init__(self, game_type):
         self.type = game_type
@@ -90,15 +105,16 @@ class Game(Base):
     @hybrid_property
     def stats(self):
         result = {'game': {'id': self.id,
-                           'is_over': self.is_over,
-                           'is_active': self.is_active,
+                           'time': self.time,
+                           'over': self.is_over,
+                           'active': self.active,
                            'current_turn': self.current_turn,
                            'deck': {'cards': []},
                            'dealer': {'hand': {
                                'cards': [],
                                'score': self.dealer.hands[0].score,
                                'is_turn': self.dealer.hands[0].is_turn,
-                               'is_expired': self.dealer.hands[0].is_expired,
+                               'expired': self.dealer.hands[0].is_expired,
                            }},
                            'pot': self.pot},
                   'seats': {},
@@ -132,6 +148,7 @@ class Hand(Base):
     id = Column('id', Integer, primary_key=True)
     game_id = Column('game_id', Integer, ForeignKey('game.id'))
     player_id = Column('player_id', Integer, ForeignKey('player.pid'))
+    player = relationship('Player', backref=backref('hands'), uselist=False)
     cards = relationship('Card', backref='hand')
     bet = Column('bet', Integer)
     score = Column('score', Integer)
@@ -176,40 +193,9 @@ class Card(Base):
                 'category': self.category,
                 'temp_value': self.temp_value}
 
-
 """
                 Login Form section
 """
-
-# def is_safe_url(target):
-#     ref_url = urlparse(request.host_url)
-#     test_url = urlparse(urljoin(request.host_url, target))
-#     return test_url.scheme in ('http', 'https') and \
-#            ref_url.netloc == test_url.netloc
-#
-#
-# def get_redirect_target():
-#     for target in request.args.get('next'), request.referrer:
-#         if not target:
-#             continue
-#         if is_safe_url(target):
-#             return target
-
-
-# class RedirectForm(Form):
-#     next = HiddenField()
-#
-#     def __init__(self, *args, **kwargs):
-#         Form.__init__(self, *args, **kwargs)
-#         if not self.next.data:
-#             self.next.data = get_redirect_target() or ''
-#
-#     def redirect(self, endpoint='index', **values):
-#         if is_safe_url(self.next.data):
-#             return redirect(self.next.data)
-#         target = get_redirect_target()
-#         return redirect(target or url_for(endpoint, **values))
-
 
 class LoginForm(Form):
     username = StringField('Username')

@@ -6,7 +6,6 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from wtforms import Form, StringField, PasswordField
 from flask.ext.login import UserMixin
 
-
 Base = declarative_base()
 
 Game_Player = Table('game_player', Base.metadata,
@@ -37,13 +36,18 @@ class Seat(Base):
 
     @hybrid_property
     def details(self):
-        return {'id': self.id,
-                'time': self.time,
-                'expired': self.expired,
-                'ready': self.ready,
-                'seat_number': self.seat_number,
-                'player_id': self.player_id,
-                'game_id': self.game_id}
+        details = {'id': self.id,
+                   'time': self.time,
+                   'expired': self.expired,
+                   'ready': self.ready,
+                   'seat_number': self.seat_number,
+                   'game_id': self.game_id}
+        if self.player:
+            details['player'] = self.player.details
+            for hand in self.player.hands:
+                if hand.game_id == self.game_id:
+                    details['player']['hands'][hand.id] = hand.details
+        return details
 
 
 class Player(UserMixin, Base):
@@ -62,7 +66,8 @@ class Player(UserMixin, Base):
         return {'email': self.email,
                 'username': self.username,
                 'pid': self.pid,
-                'bank': self.bank}
+                'bank': self.bank,
+                'hands': {}}
 
     def is_active(self):
         """True, as all users are active."""
@@ -134,12 +139,12 @@ class Game(Base):
                              'value': card.value,
                              'category': card.category}
                 result['game']['dealer']['hand']['cards'].append(card_dict)
-        for player in self.players:
-            result['players'][str(player.pid)] = player.details
-            result['players'][str(player.pid)]['hands'] = {}
-            for hand in player.hands:
-                if hand.game_id == self.id:
-                    result['players'][str(player.pid)]['hands'][str(hand.id)] = hand.details
+        # for player in self.players:
+        #     result['players'][str(player.pid)] = player.details
+        #     result['players'][str(player.pid)]['hands'] = {}
+        #     for hand in player.hands:
+        #         if hand.game_id == self.id:
+        #             result['players'][str(player.pid)]['hands'][str(hand.id)] = hand.details
         return result
 
 
@@ -193,9 +198,11 @@ class Card(Base):
                 'category': self.category,
                 'temp_value': self.temp_value}
 
+
 """
                 Login Form section
 """
+
 
 class LoginForm(Form):
     username = StringField('Username')

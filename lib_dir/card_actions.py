@@ -1,6 +1,6 @@
 __author__ = 'cory'
 from random import randint
-
+from flask import jsonify
 from models import Card, Hand
 # # from cards_app import session
 
@@ -42,9 +42,12 @@ def hit(hand, count):
     player = hand.player
     i = 0
     while i < count:
-        card = cards.pop()
+        card = cards[randint(0, (len(cards)-1))]
+        print(card)
+        hand.game.deck.cards.remove(card)
         player.cards.append(card)
         hand.cards.append(card)
+        print(hand.id)
         i += 1
     # session.commit()
 

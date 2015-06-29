@@ -22,17 +22,16 @@
     <button id="startGame">Start Game</button>
     <span id="start"></span>
 </div>
-
 <div id="seatSelection">
-    <div class="seatDiv" seatNumber=1 player=""></div>
+    <div class="seatDiv" id="seat1" player=""></div>
 
-    <div class="seatDiv" seatNumber=2 player=""></div>
+    <div class="seatDiv" id="seat2" player=""></div>
 
-    <div class="seatDiv" seatNumber=3 player=""></div>
+    <div class="seatDiv" id="seat3" player=""></div>
 
-    <div class="seatDiv" seatNumber=4 player=""></div>
+    <div class="seatDiv" id="seat4" player=""></div>
 
-    <div class="seatDiv" seatNumber=5 player=""></div>
+    <div class="seatDiv" id="seat5" player=""></div>
 
 </div>
 
@@ -40,52 +39,60 @@
 
 <script>
 
+    window.game = {};
 
     window.updatePage = function () {
-        $.getScript("/static/blackjack.js", function () {
-        var game = new Game(window.currentData);
-        console.log('wut', game.active);
-        game.addSeats();
-        game.addPlayers();
-        if (game.active) {
-            for (var i = 0; i < game.seats.length; i++) {
-                var seatString = 'div[seatNumber=' + i + 1 + ']';
-                var seat = document.querySelector(seatString);
-                console.log('doin it');
-                seat.setAttribute('player', game.seats[i]['playerID']);
-                if (seat['playerID'] != null) {
-                    var player = game.getPlayer(seat['playerID']);
-                    for (var h = 0; h < player.hands.length; h++) {
-                        seat.appendChild(player.drawHand());
-                    }
-                } else {
-                    var sitSpan = document.createElement('span');
-                    sitSpan.innerHTML = 'Sit in this seat';
-                    sitSpan.addEventListener('click', sitListener);
-                    seat.appendChild(sitSpan);
+        var startButton = document.querySelector("buttin[id='startGame']");
+        $('#startGame').click(function () {
+            $.post('/blackjack_deal/{{ game.id }}');
+        });
+        console.log('wat');
+        var game = window.game;
+        var seatKeys = Object.keys(game.seats);
+        console.log(seatKeys);
+        for (var i = 0; i < seatKeys.length; i++) {
+            var seatStr = "div[id=seat" + String(i + 1) + "]";
+            var seatDiv = document.querySelector(seatStr);
+            var seat = game.seats[seatKeys[i]];
+            seatDiv.innerHTML = "";
+            if (seat.player) {
+                seatDiv.setAttribute('player', seat.player.id);
+                console.log(seat.player);
+                var player = seat.player;
+                var handKeys = Object.keys(player.hands);
+                for (var h = 0; h < handKeys.length; h++) {
+                    var hand = player.hands[handKeys[h]];
+                    var handDiv = hand.drawHand();
+                    seatDiv.appendChild(handDiv);
                 }
+            } else {
+                // No player is sitting here yet
+                var sitSpan = document.createElement('span');
+                sitSpan.seat = seat;
+                sitSpan.innerHTML = 'Sit here';
+                sitSpan.addEventListener('click', function(){
+                    sitSpan.seat.sit();
+                });
+                seatDiv.appendChild(sitSpan);
             }
         }
-            })
     };
 
-{#    $.getScript("/static/blackjack.js", function () {#}
-{#        window.updatePage();#}
-{#    });#}
 
     var request = new XMLHttpRequest();
     var onRequestChange = function () {
         if ((request.readyState == 4) && (request.status == 200)) {
             var data = JSON.parse(request.responseText);
             var a = JSON.stringify(data);
-            var b = JSON.stringify(window.currentData);
+            var b = JSON.stringify(window.game.data);
             $('#start').html = 'Game started ' + data['time_delta'] + ' ago';
             if (a != b) {
-                window.currentData = data;
+                window.data = data;
+                window.game = new Game(data);
+                window.game.compile();
                 window.updatePage();
             } else {
                 console.log(a == b);
-                window.updatePage();
             }
         }
     };
@@ -96,10 +103,9 @@
         request.send();
     };
 
-    var dataTimer = setInterval(function () {
+    var dataTimer = setInterval(function(){
         getData();
-    }, 1000);
-
+    }, 1000)
 </script>
 
 </html>

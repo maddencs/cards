@@ -21,7 +21,7 @@ class GameRoom(Base):
 
 
 class Seat(Base):
-    __tablename__ = 'seating'
+    __tablename__ = 'seat'
     id = Column(Integer, primary_key=True)
     seat_number = Column(Integer)
     player_id = Column(Integer, ForeignKey('player.pid'))
@@ -54,8 +54,8 @@ class Player(UserMixin, Base):
     __tablename__ = 'player'
     email = Column('email', String(80), unique=True)
     username = Column('username', String(20), unique=True)
+    hands = relationship('Hand', backref='player')
     pid = Column(Integer, primary_key=True)
-    # hands = relationship('Hand', backref='player')
     cards = relationship('Card', backref='player')
     bank = Column('bank', Integer, default=100)
     password = Column('password', String(255))
@@ -65,7 +65,7 @@ class Player(UserMixin, Base):
     def details(self):
         return {'email': self.email,
                 'username': self.username,
-                'pid': self.pid,
+                'id': self.pid,
                 'bank': self.bank,
                 'hands': {}}
 
@@ -151,9 +151,9 @@ class Game(Base):
 class Hand(Base):
     __tablename__ = 'hand'
     id = Column('id', Integer, primary_key=True)
-    game_id = Column('game_id', Integer, ForeignKey('game.id'))
-    player_id = Column('player_id', Integer, ForeignKey('player.pid'))
-    player = relationship('Player', backref=backref('hands'), uselist=False)
+    game_id = Column(Integer, ForeignKey('game.id'))
+    player_id = Column(Integer, ForeignKey('player.pid'))
+    # player = relationship('Player', backref=backref('hands'), uselist=False)
     cards = relationship('Card', backref='hand')
     bet = Column('bet', Integer)
     score = Column('score', Integer)
@@ -164,13 +164,13 @@ class Hand(Base):
     def details(self):
         result = {'game_id': self.game_id,
                   'id': self.id,
-                  'cards': [],
+                  'cards': {},
                   'bet': self.bet,
                   'score': self.score,
                   'is_turn': self.is_turn,
                   'is_expired': self.is_expired}
         for card in self.cards:
-            result['cards'].append(card.details)
+            result['cards'][card.id] = card.details
         return result
 
     def __init__(self):

@@ -1,6 +1,4 @@
 __author__ = 'cory'
-from models import Hand
-from cards_app import session
 from lib_dir.card_actions import hit
 
 """
@@ -71,8 +69,8 @@ def blackjack_payout(game):
     setting up the next game after payout
     """
     for player in game.players:
-        hands = session.query(Hand).filter(Hand.game == game).filter(Hand.player == player).all()
-        for hand in hands:
+        # hands = session.query(Hand).filter(Hand.game == game).filter(Hand.player == player).all()
+        for hand in game.hands:
             if not hand.is_expired:
                 if hand.score < 21:
                     if game.dealer.hands[0].score < hand.score:

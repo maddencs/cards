@@ -7,9 +7,10 @@ from models import Player, Game, LoginForm, Hand, Seat, GameRoom
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager
 from lib_dir.card_actions import hit, piece_maker
+from blackjack.rules import count_blackjack
 import datetime
 
-suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs']
+suits = ['Spade', 'Heart', 'Diamond', 'Club']
 card_values = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King']
 
 app = Flask(__name__)
@@ -33,7 +34,7 @@ def load_user_from_request(request):
     if token is not None:
         email, password = token.split(':')
         user_entry = session.query(Player).filter(Player.email == email)
-        if (user_entry is not None):
+        if user_entry is not None:
             user = Player(user_entry[0], user_entry[1])
 
 @login_manager.user_loader
@@ -71,12 +72,14 @@ def game_page():
 def create_game(game_type, room_id):
     if request.method == 'GET':
         dealer = Player()
+        session.add(dealer)
         game = Game(game_type)
         if game_type == 'Blackjack':
             i = 1
             while i <= 5:
                 seat = Seat(i)
                 game.seats.append(seat)
+                session.commit()
                 i += 1
         game.time = datetime.datetime.now()
         game.dealer = dealer
@@ -150,24 +153,23 @@ def register():
 @app.route('/blackjack_deal/<int:game_id>', methods=['POST', 'GET'])
 def blackjack_deal(game_id):
     game = session.query(Game).filter(Game.id == game_id).all()[0]
-    if game.deck is None:
-        deck = Hand()
-        game.deck = deck
-    else:
-        deck = game.deck
-    if len(deck.cards) == 0:
-        deck.cards = piece_maker(suits, card_values, 1)
-    game.is_active = True
-    game.is_over = False
+    deck = Hand()
+    session.add(deck)
+    game.deck = deck
+    if len(game.deck.cards) == 0:
+        cards = piece_maker(suits, card_values, 1)
+        session.add_all(cards)
+        game.deck.cards = cards
     for seat in game.seats:
-        if seat.player is not None:
-            game.current_turn = seat.seat_number
-            session.commit()
-    for player in game.players:
-        if session.query(Seat).filter(Seat.player == player).filter(Seat.game_id == game_id).all():
-            hand = session.query(Hand).filter(Hand.player_id == player.pid).filter(Hand.game_id == game_id).all()[0]
-            hit(hand, 2)
-            session.commit()
+        if seat.player:
+            print('pid', seat.player.pid, 'game', game.id)
+            for hand in seat.player.hands:
+                if hand.game_id == game.id and hand.player_id == seat.player.pid:
+                    # hand = session.query(Hand).filter(Hand.game_id == game.id).filter(Hand.player_id == seat.player.pid).all()[0]
+                    print(hand)
+                    hit(hand, 2)
+                    count_blackjack(hand)
+                    session.commit()
     game.time = datetime.datetime.utcnow()
     return jsonify({'status': 'done'})
 
@@ -182,31 +184,30 @@ def game_stats(game_id):
     stats['time_delta'] = t_delta
     return jsonify(stats)
 
-@app.route('/game/<int:game_id>/seat/<int:seat_number>', methods=['POST', 'GET'])
-def sit(game_id, seat_number):
+@app.route('/seat/<int:seat_id>', methods=['POST', 'GET'])
+def sit(seat_id):
     if request.method == 'POST':
-        seat = session.query(Seat).filter(Seat.game_id == game_id).filter(Seat.seat_number == seat_number).all()[0]
-        seat.player = current_user
-        seat.ready = False
+        seat = session.query(Seat).filter(Seat.id == seat_id).all()[0]
+        current_user.seats.append(seat)
         seat.time = datetime.datetime.utcnow()
-        game = session.query(Game).filter(Game.id == game_id).all()[0]
+        game = session.query(Game).filter(Game.id == seat.game_id).all()[0]
         game.time = datetime.datetime.utcnow()
         game.players.append(current_user)
-        game.seats.append(seat)
         hand = Hand()
-        hand.player_id = current_user.pid
-        current_user.hands.append(hand)
+        session.add(hand)
+        player = session.query(Player).filter(Player.pid == current_user.pid).all()[0]
+        player.hands.append(hand)
         game.hands.append(hand)
+        session.flush()
         session.commit()
         return jsonify(game.stats)
     else:
-        seat = session.query(Seat).filter(Seat.seat_number == seat_number).filter(Seat.game_id == game_id).all()[0]
+        seat = session.query(Seat).filter(Seat.game_id == seat_id).all()[0]
         return jsonify(seat.details)
 
 @app.route('/status_check/<int:game_id>', methods=['POST', 'GET'])
 def status_check(game_id):
     game = session.query(Game).filter(Game.id == game_id).all()[0]
-    seat_keys = game.stats['seats'].keys()
     date = request.form['date']
     date = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
     delta = abs(date - game.time)

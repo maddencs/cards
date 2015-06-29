@@ -86,7 +86,7 @@ var Hand = function (hand) {
     this.gameID = hand['game_id'];
     this.expired = hand['expired'];
     this.cards = {};
-    this.currentBet = hand['bet']
+    this.currentBet = hand['bet'];
     this.score = hand['score'];
     this.drawHand = function () {
         var handDiv = handBox(this);
@@ -116,17 +116,10 @@ var Hand = function (hand) {
         $.post('/hit/hand/' + this.id + '/' + count);
     };
     this.bet = function (bet) {
-        console.log(bet);
-        $.get('/bet/' + this.id + '/' + bet)
-            .done(function (data) {
-                if (data['status'] == 'failed') {
-                    console.log(data)
-                } else if (data['status'] == 'success') {
-                    // perform successful bet actions heref
-                    console.log(data)
-                }
-            })
-    }
+        var betURL = '/bet/' + this.id + '/' + bet;
+        console.log(betURL);
+        $.post(betURL);
+    };
 };
 
 var Card = function (card) {
@@ -150,39 +143,47 @@ var handBox = function (hand) {
     var hitSpan = document.createElement('span');
     var splitButton = document.createElement('button');
     var betDiv = document.createElement('div');
-    var betForm = document.createElement('form');
+    var betForm = document.createElement('div');
     var betLabel = document.createElement('label');
     var betInput = document.createElement('input');
     var betSubmit = document.createElement('input');
     var scoreSpan = document.createElement('span');
     var currentBet = document.createElement('span');
+    var hiddenInput = document.createElement('input');
+    hiddenInput.style.display = 'none';
+    hiddenInput.setAttribute('hand', hand.id);
+    betForm.appendChild(hiddenInput);
     var cardKeys = Object.keys(hand.cards);
-    if(cardKeys.length == 2){
-        if(hand.cards[cardKeys[0]].sequence == hand.cards[cardKeys[1]].sequence){
-            splitButton.innerHTML = 'Split';
-            splitButton.addEventListener('click', function(){
-                hand.split();
-            });
-            moveDiv.appendChild(splitButton);
+    if(!hand.expired){
+        if(cardKeys.length == 2) {
+            if (hand.cards[cardKeys[0]].sequence == hand.cards[cardKeys[1]].sequence) {
+                splitButton.innerHTML = 'Split';
+                splitButton.addEventListener('click', function () {
+                    hand.split();
+                });
+                moveDiv.appendChild(splitButton);
+            }
         }
-    }
-    standSpan.innerHTML = 'Stand';
-    standSpan.addEventListener('click', function(){
-        hand.stand();
-    });
-    betForm.addEventListener('submit', function(){
-        var betValue = betInput.value;
-        hand.bet(betValue);
-    });
-    hitSpan.innerHTML = 'Hit';
-    hitSpan.addEventListener('click', function(){
-        hand.hit(1);
-    });
+        standSpan.innerHTML = 'Stand';
+        standSpan.addEventListener('click', function(){
+            hand.stand();
+        });
+        betSubmit.addEventListener('click', function(){
+            var betValue = betInput.value;
+            hand.bet(betValue);
+        });
+        hitSpan.innerHTML = 'Hit';
+        hitSpan.addEventListener('click', function(){
+            hand.hit(1);
+        });
+        }
+
     currentBet.innerHTML = 'Current bet: ' + hand.currentBet;
     scoreSpan.innerHTML = 'Current hand score: ' + hand.score;
     handDiv.appendChild(scoreSpan);
     handDiv.appendChild(currentBet);
     betForm.setAttribute('handID', hand.id);
+    betForm.setAttribute('method', 'POST');
     cardDiv.classList.add('cards');
     betDiv.appendChild(betForm);
     betForm.appendChild(betLabel);
@@ -190,6 +191,7 @@ var handBox = function (hand) {
     betForm.appendChild(betSubmit);
     betInput.setAttribute('name', 'betValue');
     betInput.setAttribute('type', 'number');
+
     betSubmit.setAttribute('type', 'submit');
     betSubmit.setAttribute('value', 'Bet');
     handDiv.appendChild(cardDiv);

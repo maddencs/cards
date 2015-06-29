@@ -31,9 +31,9 @@ def evaluate_hit(hand):
     game = hand.game
     player = hand.player
     if hand.score > 21:
-        # break, lose bet
-        pass
+        hand.is_expired = True
     elif hand.score == 21:
+        hand.is_expired = True
         pass
     elif len(hand.cards) == 5:
         # maybe let player win if they have five cards

@@ -6,8 +6,8 @@ from config import db_connect, create_tables
 from models import Player, Game, LoginForm, Hand, Seat, GameRoom
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager
-from lib_dir.card_actions import hit, piece_maker, split
-from blackjack.rules import count_blackjack
+from lib_dir.card_actions import hit, piece_maker, split, bet
+from blackjack.rules import count_blackjack, evaluate_hit
 import datetime
 
 suits = ['Spade', 'Heart', 'Diamond', 'Club']
@@ -79,6 +79,10 @@ def create_game(game_type, room_id):
         dealer = Player()
         session.add(dealer)
         game = Game(game_type)
+        session.add(game)
+        deck = Hand()
+        session.add(deck)
+        game.deck = deck
         if game_type == 'Blackjack':
             i = 1
             while i <= 5:
@@ -91,7 +95,6 @@ def create_game(game_type, room_id):
         dealer_hand = Hand()
         dealer.hands.append(dealer_hand)
         game.players.append(current_user)
-        session.add(game)
         session.commit()
         if room_id != 0:
             room = session.query(GameRoom).filter(GameRoom.id == room_id).all()[0]
@@ -128,11 +131,14 @@ def game_room(room_id):
 
 @app.route('/bet/<int:hand_id>/<int:bet_value>', methods=['POST', 'GET'])
 @login_required
-def bet(hand_id, bet_value):
+def game_bet(hand_id, bet_value):
     data = {}
     hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
     if hand.player.bank >= bet_value:
+        print('before')
         bet(hand, bet_value)
+        print('after')
+        session.commit()
         data['status'] = 'success'
     else:
         data['status'] = 'failed'
@@ -169,22 +175,17 @@ def register():
 @app.route('/blackjack_deal/<int:game_id>', methods=['POST', 'GET'])
 def blackjack_deal(game_id):
     game = session.query(Game).filter(Game.id == game_id).all()[0]
-    deck = Hand()
-    session.add(deck)
-    game.deck = deck
     if len(game.deck.cards) == 0:
         cards = piece_maker(suits, card_values, 1)
         session.add_all(cards)
         game.deck.cards = cards
     for seat in game.seats:
         if seat.player:
-            print('pid', seat.player.pid, 'game', game.id)
-            for hand in seat.player.hands:
+            hand = session.query(Hand).filter(Hand.game_id == game.id).filter(Hand.player_id == seat.player.pid).all()[0]
+            if hand.bet != 0:
+                hit(hand, 2)
+                count_blackjack(hand)
 
-                if hand.game_id == game.id:
-                    # hand = session.query(Hand).filter(Hand.game_id == game.id).filter(Hand.player_id == seat.player.pid).all()[0]
-                    hit(hand, 2)
-                    count_blackjack(hand)
     session.commit()
     game.time = datetime.datetime.utcnow()
     return jsonify({'status': 'done'})
@@ -212,11 +213,12 @@ def sit(seat_id):
         game.time = datetime.datetime.utcnow()
         game.players.append(current_user)
         hand = Hand()
-        session.add(hand)
         player = session.query(Player).filter(Player.pid == current_user.pid).all()[0]
         player.hands.append(hand)
         player.seats.append(seat)
         game.hands.append(hand)
+        seat.game = game
+        session.add(hand)
         session.commit()
         return jsonify(game.stats)
     else:
@@ -230,7 +232,6 @@ def status_check(game_id):
     date = request.form['date']
     date = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z')
     delta = abs(date - game.time)
-
     # end user's turn by setting seat inactive if time since last move > 10 seconds
     # set current turn
     if delta.seconds > 10:
@@ -239,7 +240,6 @@ def status_check(game_id):
                 if seat.ready and game.active:
                     game.current_turn = seat.seat_number
                     game.time = datetime.datetime.utcnow()
-                    print('current turn for game', game.current_turn)
                     break
         session.commit()
     return jsonify(game.stats)
@@ -260,6 +260,7 @@ def split(hand_id):
     player = hand.player
     game = hand.game
     new_hand = Hand()
+    count_blackjack(hand)
     session.add(new_hand)
     new_hand.cards = [hand.cards.pop()]
     game.hands.append(new_hand)
@@ -281,10 +282,10 @@ def stand(hand_id):
 
 @app.route('/hit/hand/<int:hand_id>/<int:count>', methods=['POST', 'GET'])
 def game_hit(hand_id, count):
-    print('adfdsafsadf', hand_id, count)
     hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
     hit(hand, count)
     count_blackjack(hand)
+    evaluate_hit(hand)
     session.commit()
     return jsonify({'status': 'success'})
 

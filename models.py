@@ -43,13 +43,9 @@ class Seat(Base):
                    'seat_number': self.seat_number,
                    'game_id': self.game_id}
         if self.player:
-            print('self player', self.player)
             details['player'] = self.player.details
             for hand in self.player.hands:
-                print('hand', hand.id, 'game id', hand.game_id, 'seat game', self.game_id)
                 if hand.game_id == self.game_id:
-                    print('inside', hand.id)
-                    print(hand.game_id, self.game_id)
                     details['player']['hands'][hand.id] = hand.details
         return details
 
@@ -100,9 +96,9 @@ class Game(Base):
     deck = relationship("Hand", uselist=False, backref="owner")
     type = Column('type', String(80))
     pot = Column('pot', Integer)
-    is_over = Column('is_over', Boolean(create_constraint=False))
-    dealer_turn = Column(Boolean(create_constraint=False))
-    active = Column(Boolean(create_constraint=False))
+    is_over = Column('is_over', Boolean, default=False)
+    dealer_turn = Column(Boolean, default=False)
+    active = Column(Boolean, default=False)
     seats = relationship('Seat', backref='game')
     current_turn = Column(Integer)
     time = Column(DateTime(timezone=False))
@@ -161,8 +157,12 @@ class Hand(Base):
     cards = relationship('Card', backref='hand')
     bet = Column('bet', Integer)
     score = Column('score', Integer)
-    is_turn = Column(Boolean(create_constraint=False))
-    is_expired = Column(Boolean(create_constraint=False))
+    is_turn = Column(Boolean, default=False)
+    is_expired = Column(Boolean, default=False)
+
+    def __init__(self):
+        self.bet = 0
+        self.score = 0
 
     @hybrid_property
     def details(self):
@@ -177,9 +177,6 @@ class Hand(Base):
             result['cards'][card.id] = card.details
         return result
 
-    def __init__(self):
-        self.bet = 0
-        self.score = 0
 
 
 class Card(Base):

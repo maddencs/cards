@@ -43,11 +43,9 @@ def hit(hand, count):
     i = 0
     while i < count:
         card = cards[randint(0, (len(cards)-1))]
-        print(card)
         hand.game.deck.cards.remove(card)
         player.cards.append(card)
         hand.cards.append(card)
-        print(hand.id)
         i += 1
     # session.commit()
 

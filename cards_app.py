@@ -6,7 +6,7 @@ from config import db_connect, create_tables
 from models import Player, Game, LoginForm, Hand, Seat, GameRoom
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager
-from lib_dir.card_actions import hit, piece_maker
+from lib_dir.card_actions import hit, piece_maker, split
 from blackjack.rules import count_blackjack
 import datetime
 
@@ -25,6 +25,7 @@ app.secret_key = 'dev_password'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 @login_manager.request_loader
 def load_user_from_request(request):
     token = request.headers.get('Authorization')
@@ -37,10 +38,12 @@ def load_user_from_request(request):
         if user_entry is not None:
             user = Player(user_entry[0], user_entry[1])
 
+
 @login_manager.user_loader
 def load_user(email):
     if len(session.query(Player).filter(Player.email == email).all()) != 0:
         return session.query(Player).filter(Player.email == email).all()[0]
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,10 +66,12 @@ def login():
     else:
         return redirect(url_for('index'))
 
+
 @app.route('/game_page', methods=['GET', 'POST'])
 def game_page():
     game_rooms = session.query(GameRoom)
     return render_template('game_page.html', rooms=game_rooms)
+
 
 @app.route('/create_game/<string:game_type>/<int:room_id>', methods=['GET'])
 def create_game(game_type, room_id):
@@ -98,15 +103,18 @@ def create_game(game_type, room_id):
             session.commit()
             return redirect(url_for('game_room', room_id=room.id))
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     flash('You were logged out')
     return redirect(url_for('index'))
 
+
 @app.route('/')
 def index():
     return render_template('login.html')
+
 
 @app.route('/room/<int:room_id>', methods=['POST', 'GET'])
 @login_required
@@ -117,16 +125,23 @@ def game_room(room_id):
     if room.current_game.type == 'Blackjack':
         return render_template('blackjack_room.html', game=room.current_game)
 
-@app.route('/bet/')
+
+@app.route('/bet/<int:hand_id>/<int:bet_value>', methods=['POST', 'GET'])
 @login_required
-def bet():
-    bet_value = request.form['betValue']
-    hand = session.query(Hand).filter(Hand.id == request.form['hand_id']).all()[0]
-    bet(hand, bet_value)
+def bet(hand_id, bet_value):
+    data = {}
+    hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
+    if hand.player.bank >= bet_value:
+        bet(hand, bet_value)
+        data['status'] = 'success'
+    else:
+        data['status'] = 'failed'
     seat = session.query(Seat).filter(Seat.game_id == hand.game_id).filter(Seat.player == current_user).all()[0]
     seat.time = datetime.datetime.utcnow()
     seat.ready = True
     session.commit()
+    return jsonify(data)
+
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -150,6 +165,7 @@ def register():
             return redirect(url_for('register'))
     return render_template('register.html')
 
+
 @app.route('/blackjack_deal/<int:game_id>', methods=['POST', 'GET'])
 def blackjack_deal(game_id):
     game = session.query(Game).filter(Game.id == game_id).all()[0]
@@ -164,14 +180,15 @@ def blackjack_deal(game_id):
         if seat.player:
             print('pid', seat.player.pid, 'game', game.id)
             for hand in seat.player.hands:
-                if hand.game_id == game.id and hand.player_id == seat.player.pid:
+
+                if hand.game_id == game.id:
                     # hand = session.query(Hand).filter(Hand.game_id == game.id).filter(Hand.player_id == seat.player.pid).all()[0]
-                    print(hand)
                     hit(hand, 2)
                     count_blackjack(hand)
-                    session.commit()
+    session.commit()
     game.time = datetime.datetime.utcnow()
     return jsonify({'status': 'done'})
+
 
 @app.route('/game_stats/<int:game_id>', methods=['POST', 'GET'])
 def game_stats(game_id):
@@ -183,6 +200,7 @@ def game_stats(game_id):
         game.time = datetime.datetime.utcnow()
     stats['time_delta'] = t_delta
     return jsonify(stats)
+
 
 @app.route('/seat/<int:seat_id>', methods=['POST', 'GET'])
 def sit(seat_id):
@@ -197,13 +215,14 @@ def sit(seat_id):
         session.add(hand)
         player = session.query(Player).filter(Player.pid == current_user.pid).all()[0]
         player.hands.append(hand)
+        player.seats.append(seat)
         game.hands.append(hand)
-        session.flush()
         session.commit()
         return jsonify(game.stats)
     else:
         seat = session.query(Seat).filter(Seat.game_id == seat_id).all()[0]
         return jsonify(seat.details)
+
 
 @app.route('/status_check/<int:game_id>', methods=['POST', 'GET'])
 def status_check(game_id):
@@ -232,8 +251,43 @@ def ready_seat(seat_id):
     game = seat.game
     game.time = datetime.datetime.utcnow()
     seat.ready = True
+    return jsonify({'status': 'success'})
+
+
+@app.route('/split/hand/<int:hand_id>', methods=['POST', 'GET'])
+def split(hand_id):
+    hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
+    player = hand.player
+    game = hand.game
+    new_hand = Hand()
+    session.add(new_hand)
+    new_hand.cards = [hand.cards.pop()]
+    game.hands.append(new_hand)
+    player.hands.append(new_hand)
+    new_hand.cards.append(game.deck.cards.pop())
+    hand.cards.append(game.deck.cards.pop())
+    session.commit()
+    return jsonify({'status': 'success'})
+
+
+@app.route('/stand/hand/<int:hand_id>', methods=['POST', 'GET'])
+def stand(hand_id):
+    hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
+    hand.is_turn = False
+    hand.is_expired = True
+    session.commit()
+    return jsonify({'status': 'success'})
+
+
+@app.route('/hit/hand/<int:hand_id>/<int:count>', methods=['POST', 'GET'])
+def game_hit(hand_id, count):
+    print('adfdsafsadf', hand_id, count)
+    hand = session.query(Hand).filter(Hand.id == hand_id).all()[0]
+    hit(hand, count)
+    count_blackjack(hand)
+    session.commit()
+    return jsonify({'status': 'success'})
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-

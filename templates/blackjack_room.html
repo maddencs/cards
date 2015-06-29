@@ -42,14 +42,12 @@
     window.game = {};
 
     window.updatePage = function () {
-        var startButton = document.querySelector("buttin[id='startGame']");
+        var startButton = document.querySelector("button[id='startGame']");
         $('#startGame').click(function () {
             $.post('/blackjack_deal/{{ game.id }}');
         });
-        console.log('wat');
         var game = window.game;
         var seatKeys = Object.keys(game.seats);
-        console.log(seatKeys);
         for (var i = 0; i < seatKeys.length; i++) {
             var seatStr = "div[id=seat" + String(i + 1) + "]";
             var seatDiv = document.querySelector(seatStr);
@@ -57,7 +55,6 @@
             seatDiv.innerHTML = "";
             if (seat.player) {
                 seatDiv.setAttribute('player', seat.player.id);
-                console.log(seat.player);
                 var player = seat.player;
                 var handKeys = Object.keys(player.hands);
                 for (var h = 0; h < handKeys.length; h++) {
@@ -77,7 +74,6 @@
             }
         }
     };
-
 
     var request = new XMLHttpRequest();
     var onRequestChange = function () {
@@ -103,9 +99,7 @@
         request.send();
     };
 
-    var dataTimer = setInterval(function(){
-        getData();
-    }, 1000)
+    getData()
 </script>
 
 </html>

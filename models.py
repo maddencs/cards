@@ -43,9 +43,13 @@ class Seat(Base):
                    'seat_number': self.seat_number,
                    'game_id': self.game_id}
         if self.player:
+            print('self player', self.player)
             details['player'] = self.player.details
             for hand in self.player.hands:
+                print('hand', hand.id, 'game id', hand.game_id, 'seat game', self.game_id)
                 if hand.game_id == self.game_id:
+                    print('inside', hand.id)
+                    print(hand.game_id, self.game_id)
                     details['player']['hands'][hand.id] = hand.details
         return details
 
